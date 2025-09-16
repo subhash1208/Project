@@ -1,0 +1,36 @@
+<cubes>
+	<cube>
+		<name>tp_benchmark_partitioned</name>
+	    <dimensions>
+			<dimension mandatory="true">l2_code</dimension>
+	        <hierarchy>
+	        	<dimension mandatory="true">country</dimension>
+	        	<dimension>state</dimension>
+	        </hierarchy>
+	        <!-- <hierarchy>
+	        	<dimension>year</dimension>
+	        	<dimension>month</dimension>
+	        </hierarchy> -->
+	    </dimensions>
+	    <type>PARTITIONED</type>
+	    <partitionspec>
+       		<dimensions>
+        		<dimension>clnt_obj_id</dimension>
+        	</dimensions>
+       	</partitionspec>
+	    <facts>
+	        <fact>
+	        	<name>regular_percentage</name>
+	        	<column>reg_temp_dsc</column>
+	        	<matches>X</matches>
+				<aggregation>
+					<type>PERCENTILE_OF_PERCENTAGES</type>
+					<arguments>
+		        		<argument>30,70</argument>
+		        		<argument>2</argument>
+		        	</arguments>
+				</aggregation>
+	        </fact>
+	    </facts>
+	</cube>
+</cubes>

@@ -1,0 +1,176 @@
+<cubes>
+	<cube>
+		<name>rosie_hr_waf_practitioner_cube</name>
+		
+		<dimensions>
+			<dimension mandatory="true">clnt_obj_id</dimension>
+			<hierarchy>
+				<dimension>yr_cd</dimension>
+				<dimension>qtr_cd</dimension>
+				<dimension>mnth_cd</dimension>
+			</hierarchy>
+			<hierarchy>
+			    <dimension>d_work_state_cd</dimension>
+				<dimension>d_work_loc_cd</dimension>
+			</hierarchy>
+			<dimension>d_job_cd</dimension>
+			<dimension>d_reg_temp_cd</dimension>
+			<dimension>d_flsa_stus_cd</dimension>
+			<dimension>d_gndr_cd</dimension>
+			<dimension>d_full_tm_part_tm_cd</dimension>
+			<dimension>d_cmpny_cd</dimension>
+			<dimension>d_hr_orgn_id</dimension>
+			<dimension>d_pay_rt_type_cd</dimension>
+		</dimensions>
+
+		<addons>
+			<supportcolumns>
+				<column>f_work_asgnmt_stus_cd</column>
+			</supportcolumns>
+		</addons>
+
+		<facts>
+
+			<fact>
+				<name>num_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_stus_cd in ('P','A','L','S')</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_voluntary_terminations</name>
+				<column>vlntry_trmnt_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_terminations</name>
+				<column>trmnt_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_promotions</name>
+				<column>promo_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_demotions</name>
+				<column>dem_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_transfers</name>
+				<column>xfr_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_hires</name>
+				<column>hir_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_rehires</name>
+				<column>reh_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>female_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_stus_cd in ('P','A','L','S') AND d_gndr_cd = 'F'</when>				
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_newhire_turnovers</name>
+				<expr>hir_ind * trmnt_ind</expr>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_inactive_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_stus_cd in ('P','L','S')</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+		</facts>
+
+		<postprocess>
+			<!-- Composite Facts -->
+			<column>
+				<name>headcount</name>
+				<expr>round(num_person_days / sys_calendar_days , 2)</expr>
+			</column>
+			<column>
+				<name>headcount_band</name>
+				<expr>CASE WHEN ceil(num_person_days / sys_calendar_days) BETWEEN 1 and 99 THEN 1 
+                WHEN ceil(num_person_days / sys_calendar_days) BETWEEN 100 and 499 THEN 2
+                WHEN ceil(num_person_days / sys_calendar_days) BETWEEN 500 and 999 THEN 3
+                WHEN ceil(num_person_days / sys_calendar_days) BETWEEN 1000 and 4999 THEN 4
+                WHEN ceil(num_person_days / sys_calendar_days) >= 5000 THEN 5 
+            	ELSE 0 END
+				</expr>
+			</column>
+			<column>
+				<name>inactive_headcount</name>
+				<expr>round(num_inactive_person_days / sys_calendar_days, 2)</expr>
+			</column>
+			<column>
+				<name>annualized_turnover_rt</name>
+				<expr>100 * num_terminations / (num_person_days / sys_calendar_days) * (365/sys_calendar_days)</expr>
+			</column>
+			<column>
+				<name>annualized_voln_turnover_rt</name>
+				<expr>100 * num_voluntary_terminations / (num_person_days / sys_calendar_days)  * (365/sys_calendar_days) </expr>
+			</column>
+			<column>
+				<name>internal_mobility_rate</name>
+				<expr>100 * (num_demotions + num_promotions + num_transfers)/(num_hires + num_terminations + num_rehires + num_demotions + num_promotions + num_transfers)</expr>
+			</column>
+			<column>
+				<name>newhire_turnover_rate</name>
+				<expr>CASE WHEN num_newhire_turnovers != 0 THEN round((100 * num_newhire_turnovers) / (num_person_days / sys_calendar_days), 2) ELSE NULL END</expr>
+			</column>
+			<column>
+				<name>female_percentage</name>
+				<expr>round(100 * (female_person_days / num_person_days), 2)</expr>
+			</column>
+			
+			<!-- Optional filters to cut down size of the cube -->
+			<filters>
+				<filter>yr_cd is not null</filter>
+			</filters>
+		</postprocess>
+
+	</cube>
+
+</cubes> 

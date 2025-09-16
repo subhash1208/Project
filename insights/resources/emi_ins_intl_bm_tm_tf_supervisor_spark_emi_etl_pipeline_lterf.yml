@@ -1,0 +1,78 @@
+resources:
+    jobs:
+        emi_ins_intl_bm_tm_tf_supervisor_spark_emi_etl_pipeline_lterf:
+            name: emi_ins_intl_bm_tm_tf_supervisor_spark_emi_etl_pipeline_lterf
+            tasks:
+              - task_key: task1_emi_ins_intl_bm_tm_tf_supervisor_spark
+                job_cluster_key: spark-application_oNsXU
+                libraries:
+                  - maven:
+                        coordinates: com.amazonaws:aws-java-sdk-secretsmanager:1.11.595
+                        repo: https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote
+                  - maven:
+                        coordinates: com.amazonaws:aws-java-sdk-comprehend:1.11.595
+                        repo: https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote
+                  - maven:
+                        coordinates: com.amazon.emr:emr-dynamodb-hadoop:4.16.0
+                        repo: https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote
+                  - maven:
+                        coordinates: com.adp.datacloud.ds:spark-insight-engine:22.06.11.f-InsightDriver_test-SNAPSHOT
+                        repo: https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-snapshots-local
+                spark_jar_task:
+                    main_class_name: com.adp.datacloud.ds.InsightDriver
+                    parameters:
+                      - --files_s3
+                      - s3://${var.codestore_bucket}/code/insights/src/etl/insight/emi_ins_tm_tf_supervisor.sql,s3://${var.codestore_bucket}/code/insights/src/etl/insight/emi_ins_intl_bm_tm_tf_supervisor.xml,s3://${var.codestore_bucket}/code/insights/src/etl/insight/emi_ins_bm_tm_tf.sql
+                    run_as_repl: true
+            job_clusters:
+              - job_cluster_key: spark-application_oNsXU
+                new_cluster:
+                    autoscale:
+                        max_workers: 35
+                        min_workers: 1
+                    aws_attributes:
+                        availability: ON_DEMAND
+                        ebs_volume_count: 1
+                        ebs_volume_size: 100
+                        ebs_volume_type: GENERAL_PURPOSE_SSD
+                        first_on_demand: 1
+                        instance_profile_arn: 
+                            arn:aws:iam::${var.aws_account_id}:instance-profile/databricks-dataplatform-dev-roletf
+                        spot_bid_price_percent: 100
+                        zone_id: auto
+                    cluster_log_conf:
+                        s3:
+                            canned_acl: bucket-owner-full-control
+                            destination: ${var.log_uri}
+                            enable_encryption: true
+                            region: us-east-1
+                    custom_tags:
+                        Application: DC_Analytics
+                        OwnerDetails: DS.ARCH@ADP.COM
+                        Function: Databricks Cluster for Datacloud Data Science
+                        ApplicationTier: App tier
+                        ResourceOwner1: Datacloud DS Architecture
+                        DataClassification: ADP Confidential
+                        ApplicationVersion: 0.1
+                        Environment: ${var.environment_name}
+                        ComponentTeam: Analytics-Experience
+                    data_security_mode: NONE
+                    enable_elastic_disk: true
+                    node_type_id: m5d.4xlarge
+                    spark_conf:
+                        spark.sql.adaptive.enabled: 'true'
+                        spark.sql.sources.partitionOverwriteMode: dynamic
+                        spark.executor.extraJavaOptions: -Duser.timezone=America/New_York
+                        spark.driver.extraJavaOptions: -Duser.timezone=America/New_York
+                        spark.databricks.hive.metastore.glueCatalog.enabled: 'true'
+                        spark.sql.shuffle.partitions: '1600'
+                        spark.serializer: org.apache.spark.serializer.KryoSerializer
+                        spark.sql.broadcastTimeout: '36000'
+                        spark.kryoserializer.buffer.max: 1024m
+                        spark.default.parallelism: 1600
+                        spark.sql.analyzer.failAmbiguousSelfJoin: 'false'
+                        spark.sql.storeAssignmentPolicy: legacy
+                        spark.sql.legacy.timeParserPolicy: legacy
+                        spark.hadoop.hive.metastore.glue.catalogid: ${var.glue_catalogid}
+                        spark.es.index.auto.create: 'true'
+                    spark_version: 14.3.x-scala2.12

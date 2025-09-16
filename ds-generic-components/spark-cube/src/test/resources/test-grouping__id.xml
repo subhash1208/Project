@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cubes>
+	<cube>
+		<name>grouping_id</name>
+		
+		<depth>2</depth>
+		
+		<dimensions>
+			<dimension>clnt_obj_id</dimension>
+			<dimension>l2_code</dimension>
+			<dimension>reg_temp_dsc</dimension>
+			<hierarchy>
+				<dimension>yr</dimension>
+				<dimension>qtr</dimension>
+			</hierarchy>
+		</dimensions>
+		
+		<facts>
+
+			<fact>
+				<name>num_records</name>
+				<column>value</column>
+				<aggregation>
+					<type>COUNT</type>
+				</aggregation>
+			</fact>
+
+		</facts>
+
+	</cube>
+
+</cubes> 

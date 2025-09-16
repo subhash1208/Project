@@ -1,0 +1,44 @@
+
+tp_benchmark_hierarchy_only
+== Parsed Logical Plan ==
+'Project [unresolvedalias('country),unresolvedalias('state),unresolvedalias('l2_code),unresolvedalias('regular_percentage)]
++- Filter NOT (true && isnull(l2_code#12))
+   +- Filter NOT ((true && isnull(country#13)) && isnotnull(state#14))
+      +- Aggregate [l2_code#12,country#13,state#14,grouping__id#11], [l2_code#12,country#13,state#14,(avg(cast((CASE WHEN cast(reg_temp_dsc#2 as string) RLIKE X THEN 1 ELSE 0 * 100) as bigint)),mode=Complete,isDistinct=false) AS regular_percentage#10]
+         +- Expand [List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, null, null, 0),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, null, null, 1),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, country#13, null, 2),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, country#13, null, 3),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, null, state#14, 4),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, null, state#14, 5),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, country#13, state#14, 6),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, country#13, state#14, 7)], [state#8,l2_code#6,clnt_obj_id#7,country#9,value#0,reg_temp_dsc#2,l2_code#12,country#13,state#14,grouping__id#11]
+            +- Project [state#8,l2_code#6,clnt_obj_id#7,country#9,value#0,reg_temp_dsc#2,l2_code#6 AS l2_code#12,country#9 AS country#13,state#8 AS state#14]
+               +- Project [state#8,l2_code#6,clnt_obj_id#7,country#9,value#0,reg_temp_dsc#2]
+                  +- Project [value#0,coalesce(l2_code#1,cast(UNKNOWN as string)) AS l2_code#6,reg_temp_dsc#2,coalesce(clnt_obj_id#3,cast(UNKNOWN as string)) AS clnt_obj_id#7,coalesce(state#4,cast(UNKNOWN as string)) AS state#8,coalesce(country#5,cast(UNKNOWN as string)) AS country#9]
+                     +- LogicalRDD [value#0,l2_code#1,reg_temp_dsc#2,clnt_obj_id#3,state#4,country#5], MapPartitionsRDD[2] at createDataFrame at testCube.scala:41
+
+== Analyzed Logical Plan ==
+country: string, state: string, l2_code: string, regular_percentage: double
+Project [country#13,state#14,l2_code#12,regular_percentage#10]
++- Filter NOT (true && isnull(l2_code#12))
+   +- Filter NOT ((true && isnull(country#13)) && isnotnull(state#14))
+      +- Aggregate [l2_code#12,country#13,state#14,grouping__id#11], [l2_code#12,country#13,state#14,(avg(cast((CASE WHEN cast(reg_temp_dsc#2 as string) RLIKE X THEN 1 ELSE 0 * 100) as bigint)),mode=Complete,isDistinct=false) AS regular_percentage#10]
+         +- Expand [List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, null, null, 0),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, null, null, 1),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, country#13, null, 2),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, country#13, null, 3),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, null, state#14, 4),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, null, state#14, 5),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, country#13, state#14, 6),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, country#13, state#14, 7)], [state#8,l2_code#6,clnt_obj_id#7,country#9,value#0,reg_temp_dsc#2,l2_code#12,country#13,state#14,grouping__id#11]
+            +- Project [state#8,l2_code#6,clnt_obj_id#7,country#9,value#0,reg_temp_dsc#2,l2_code#6 AS l2_code#12,country#9 AS country#13,state#8 AS state#14]
+               +- Project [state#8,l2_code#6,clnt_obj_id#7,country#9,value#0,reg_temp_dsc#2]
+                  +- Project [value#0,coalesce(l2_code#1,cast(UNKNOWN as string)) AS l2_code#6,reg_temp_dsc#2,coalesce(clnt_obj_id#3,cast(UNKNOWN as string)) AS clnt_obj_id#7,coalesce(state#4,cast(UNKNOWN as string)) AS state#8,coalesce(country#5,cast(UNKNOWN as string)) AS country#9]
+                     +- LogicalRDD [value#0,l2_code#1,reg_temp_dsc#2,clnt_obj_id#3,state#4,country#5], MapPartitionsRDD[2] at createDataFrame at testCube.scala:41
+
+== Optimized Logical Plan ==
+Project [country#13,state#14,l2_code#12,regular_percentage#10]
++- Aggregate [l2_code#12,country#13,state#14,grouping__id#11], [l2_code#12,country#13,state#14,(avg(cast((CASE WHEN reg_temp_dsc#2 RLIKE X THEN 1 ELSE 0 * 100) as bigint)),mode=Complete,isDistinct=false) AS regular_percentage#10]
+   +- Project [reg_temp_dsc#2,state#14,l2_code#12,grouping__id#11,country#13]
+      +- Filter ((NOT isnull(country#13) || NOT isnotnull(state#14)) && NOT isnull(l2_code#12))
+         +- Expand [List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, null, null, 0),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, null, null, 1),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, country#13, null, 2),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, country#13, null, 3),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, null, state#14, 4),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, null, state#14, 5),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, country#13, state#14, 6),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, country#13, state#14, 7)], [state#8,l2_code#6,clnt_obj_id#7,country#9,value#0,reg_temp_dsc#2,l2_code#12,country#13,state#14,grouping__id#11]
+            +- Project [coalesce(state#4,UNKNOWN) AS state#8,coalesce(l2_code#1,UNKNOWN) AS l2_code#6,coalesce(clnt_obj_id#3,UNKNOWN) AS clnt_obj_id#7,coalesce(country#5,UNKNOWN) AS country#9,value#0,reg_temp_dsc#2,coalesce(l2_code#1,UNKNOWN) AS l2_code#12,coalesce(country#5,UNKNOWN) AS country#13,coalesce(state#4,UNKNOWN) AS state#14]
+               +- LogicalRDD [value#0,l2_code#1,reg_temp_dsc#2,clnt_obj_id#3,state#4,country#5], MapPartitionsRDD[2] at createDataFrame at testCube.scala:41
+
+== Physical Plan ==
+Project [country#13,state#14,l2_code#12,regular_percentage#10]
++- TungstenAggregate(key=[l2_code#12,country#13,state#14,grouping__id#11], functions=[(avg(cast((CASE WHEN reg_temp_dsc#2 RLIKE X THEN 1 ELSE 0 * 100) as bigint)),mode=Final,isDistinct=false)], output=[l2_code#12,country#13,state#14,regular_percentage#10])
+   +- TungstenExchange hashpartitioning(l2_code#12,country#13,state#14,grouping__id#11,200), None
+      +- TungstenAggregate(key=[l2_code#12,country#13,state#14,grouping__id#11], functions=[(avg(cast((CASE WHEN reg_temp_dsc#2 RLIKE X THEN 1 ELSE 0 * 100) as bigint)),mode=Partial,isDistinct=false)], output=[l2_code#12,country#13,state#14,grouping__id#11,sum#107,count#108L])
+         +- Project [reg_temp_dsc#2,state#14,l2_code#12,grouping__id#11,country#13]
+            +- Filter ((NOT isnull(country#13) || NOT isnotnull(state#14)) && NOT isnull(l2_code#12))
+               +- Expand [List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, null, null, 0),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, null, null, 1),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, country#13, null, 2),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, country#13, null, 3),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, null, state#14, 4),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, null, state#14, 5),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, null, country#13, state#14, 6),List(state#8, l2_code#6, clnt_obj_id#7, country#9, value#0, reg_temp_dsc#2, l2_code#12, country#13, state#14, 7)], [state#8,l2_code#6,clnt_obj_id#7,country#9,value#0,reg_temp_dsc#2,l2_code#12,country#13,state#14,grouping__id#11]
+                  +- Project [coalesce(state#4,UNKNOWN) AS state#8,coalesce(l2_code#1,UNKNOWN) AS l2_code#6,coalesce(clnt_obj_id#3,UNKNOWN) AS clnt_obj_id#7,coalesce(country#5,UNKNOWN) AS country#9,value#0,reg_temp_dsc#2,coalesce(l2_code#1,UNKNOWN) AS l2_code#12,coalesce(country#5,UNKNOWN) AS country#13,coalesce(state#4,UNKNOWN) AS state#14]
+                     +- Scan ExistingRDD[value#0,l2_code#1,reg_temp_dsc#2,clnt_obj_id#3,state#4,country#5]

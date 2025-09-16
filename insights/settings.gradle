@@ -1,0 +1,10 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/gradle-plugins-maven-remote/' }
+    }
+}
+
+rootProject.name = 'insights'
+
+include 'emi_recommend_feature_engineering'

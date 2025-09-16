@@ -1,0 +1,133 @@
+<cubes>
+	<cube>
+		<name>emi_cube_hr_wef_practitioner</name>
+
+		<dimensions>
+			<dimension mandatory="true">clnt_obj_id</dimension>
+			<hierarchy>
+				<dimension mandatory="true">yr_cd</dimension>
+				<dimension>qtr_cd</dimension>
+				<dimension>mnth_cd</dimension>
+			</hierarchy>
+			<hierarchy>
+				<dimension>d_work_cntry_cd</dimension>
+				<dimension xor-group-name="main">d_work_state_cd</dimension>
+				<dimension>d_work_loc_cd</dimension>
+			</hierarchy>
+			<dimension xor-group-name="main">d_job_cd</dimension>
+			<!--dimension xor-group-name="main">d_gndr_cd</dimension-->
+			<dimension xor-group-name="main">d_hr_orgn_id</dimension>
+			<dimension xor-group-name="main">d_trmnt_rsn</dimension>
+		</dimensions>
+
+		<addons>
+			<supportcolumns>
+				<column>new_hir_ind</column>
+				<column>work_asgnmt_stus_cd</column>
+				<column>pers_stus_cd</column>
+				<column>event_cd</column>
+			</supportcolumns>
+		</addons>
+
+		<facts>
+			<fact>
+				<name>avg_time_to_promotion</name>
+				<column>months_between_promotion</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_voluntary_terminations</name>
+				<column>vlntry_trmnt_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_terminations</name>
+				<column>trmnt_ind</column>
+				<when>work_asgnmt_stus_cd IN ('T', 'R', 'D') or (event_cd = 'LOF' AND work_asgnmt_stus_cd = 'S')</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_promotions</name>
+				<column>promo_ind</column>
+				<when>pers_stus_cd != 'N'</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_demotions</name>
+				<column>dem_ind</column>
+				<when>pers_stus_cd != 'N'</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_transfers</name>
+				<column>xfr_ind</column>
+				<when>pers_stus_cd != 'N'</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_hires</name>
+				<when>work_asgnmt_stus_cd IN ('A', 'L', 'P', 'S')</when>
+				<column>hir_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_rehires</name>
+				<when>work_asgnmt_stus_cd IN ('A', 'L', 'P', 'S')</when>
+				<column>reh_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_newhire_turnovers</name>
+				<when>work_asgnmt_stus_cd IN ('T', 'R', 'D') or (event_cd = 'LOF' AND work_asgnmt_stus_cd = 'S')</when>
+				<expr>new_hir_ind * trmnt_ind</expr>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">int_mobility_rate_ind_cnt</name>
+				<column>int_mobility_rate_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+		</facts>
+
+		<postprocess>
+			<!-- Composite Facts -->
+			<column>
+				<name>internal_mobility_rate</name>
+				<expr>100 * (num_demotions + num_promotions + num_transfers)/(int_mobility_rate_ind_cnt)</expr>
+				<inclusionrange>0,100</inclusionrange>
+			</column>
+		</postprocess>
+
+	</cube>
+
+</cubes>

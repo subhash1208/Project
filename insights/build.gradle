@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local/' } // ADP DataCloud's custom gradle plugins are here.
+    }
+    dependencies {
+        classpath 'com.adp.datacloud.ds.gradleplugins:adp-gradle-plugins:1.0'
+    }
+}
+
+plugins {
+    id "com.dorongold.task-tree" version "2.1.0"
+}
+
+apply plugin: "base"
+apply plugin: "maven"
+apply plugin: "maven-publish"
+
+group = 'com.adp.datacloud.ds'
+
+
+task assembleArtifact(type: com.adp.datacloud.ds.gradleplugins.DcZipTask, dependsOn: [":emi_recommend_feature_engineering:assemble"]) {
+
+
+    from("emi_recommend_feature_engineering/build/libs") {
+        print("Including " + "emi_recommend_feature_engineering-${project.version}.jar")
+        include "emi_recommend_feature_engineering-${project.version}.jar"
+        rename { String filename ->
+            filename.replace("-${project.version}.jar", ".jar")
+        }
+    }
+
+
+
+    description "Assemble archive $archiveName into ${relativePath(destinationDir)}"
+}
+
+//task publishToEcr(type:Exec) {
+    // "ins" is the shortname used for Insights  project
+//    commandLine 'sh', './src/ml/build_and_push.sh', "${project.shortname}", "${project.version}"
+//}
+//uploadArchives.dependsOn(publishToEcr)
+
+configurations {
+    archives
+}
+artifacts {
+    archives assembleArtifact
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local/") {
+                authentication(userName: "${System.env.ARTIFACTORY_CREDENTIALS_USR}", password: "${System.env.ARTIFACTORY_CREDENTIALS_PSW}")
+            }
+            snapshotRepository(url: 'https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-snapshots-local/') {
+                authentication(userName: "${System.env.ARTIFACTORY_CREDENTIALS_USR}", password: "${System.env.ARTIFACTORY_CREDENTIALS_PSW}")
+            }
+        }
+    }
+}

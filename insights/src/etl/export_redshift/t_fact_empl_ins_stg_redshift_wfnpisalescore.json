@@ -1,0 +1,9 @@
+{
+    "dxr-product-name": "redshift_tgt_query_wfnpisalescore.sql",
+    "hive-table": "${hiveconf:__BLUE_MAIN_DB__}.t_fact_empl_ins_stg_redshift",
+    "target-rdbms-table": "[OWNERID].t_fact_empl_ins_stg",
+    "target-db-type": "redshift",
+    "pre-sql-content": "emi_dw_empl_pre_export_redshift.sql",
+    "post-sql-content": "emi_dw_empl_post_export_redshift.sql",
+    "plsql-timeout": 18000
+}

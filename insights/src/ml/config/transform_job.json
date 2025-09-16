@@ -1,0 +1,28 @@
+{
+    "MaxPayloadInMB": 10,
+    "BatchStrategy": "MultiRecord",
+    "TransformInput": {
+        "DataSource": {
+            "S3DataSource": {
+                "S3DataType": "S3Prefix",
+                "S3Uri": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset_output/batch/"
+            }
+        },
+        "CompressionType": "None",
+        "ContentType": "application/json",
+        "SplitType": "Line"
+    },
+    "Environment": {
+        "SAGEMAKER_PROGRAM": "serving",
+        "SAGEMAKER_SUBMIT_DIRECTORY": "/opt/ml/code"
+    },
+    "TransformOutput": {
+        "S3OutputPath": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset_output/batch/ouput",
+        "Accept": "application/json",
+        "AssembleWith": "Line"
+    },
+    "TransformResources": {
+        "InstanceType": "ml.m5.xlarge",
+        "InstanceCount": 1
+    }
+}

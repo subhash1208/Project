@@ -1,0 +1,6 @@
+bin/
+.gradle/
+.cache/
+build/
+.settings/
+spark-warehouse/

@@ -1,0 +1,28 @@
+dependencies {
+    implementation("org.elasticsearch:elasticsearch-spark-20_${scalaVersion}:7.12.0"){
+        exclude group: 'org.apache.spark'
+    }
+    implementation("com.amazon.emr:emr-dynamodb-hadoop:4.12.0"){
+        exclude group: 'com.amazonaws'
+    }
+    implementation("org.mongodb.spark:mongo-spark-connector_${scalaVersion}:${mongodbDriverVersion}")
+    // TODO: dependency cleanup needed
+    implementation("ai.h2o:h2o-genmodel:3.14.0.1")
+    implementation("com.adp.datacloud.ds.h2o:h2o-jobsnskills-word2vec:1.0")
+}
+
+jar {
+    // Make a fatjar by adding other dependency jars & drivers
+    from {
+        configurations.runtimeClasspath.filter({
+            it.name =~ /spark-adp-commons.*\.jar/ || // left for backward compatibility of gradle, and better readability
+            it.name =~ /scopt.*\.jar/ ||
+            it.name =~ /mongo.*\.jar/ ||
+            it.name =~ /elasticsearch.*\.jar/
+        }).collect {
+            // For the sake of ease of use, we will work around jarsigning issues while creating fatjars
+            // Certain oracle jars are signed jars, and we will make them unsigned while embedding
+            zipTree(it).matching{ exclude{it.path.contains('META-INF')} }
+        }
+    }
+}

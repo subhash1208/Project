@@ -1,0 +1,44 @@
+dependencies {
+   implementation("com.amazon.deequ:deequ:2.0.1-spark-3.2") {
+        exclude group: 'org.apache.spark'
+        exclude group: 'org.slf4j'
+        }
+
+//     implementation("com.amazon.deequ:deequ:2.0.0-spark-3.1"){
+//         exclude group: 'org.apache.spark'
+//         exclude group: 'org.slf4j'
+//         }
+
+    // oracle wallet jars
+    implementation("com.oracle.database.jdbc:ojdbc8:${orcleWalletJarsVersion}")
+    implementation("com.oracle.database.security:oraclepki:${orcleWalletJarsVersion}")
+    implementation("com.oracle.database.security:osdt_cert:${orcleWalletJarsVersion}")
+    implementation("com.oracle.database.security:osdt_core:${orcleWalletJarsVersion}")
+	}
+
+
+jar {
+    // Make a fatjar by adding other dependency jars & drivers
+    from {
+        configurations.compileClasspath.filter({
+            it.name =~ /spark-adp-commons.*\.jar/ || // left for backward compatibility of gradle, and better readability
+            it.name =~ /scopt.*\.jar/ || 
+            it.name =~ /deequ.*\.jar/ || 
+            it.name =~ /oraclepki.*\.jar/ || 
+            it.name =~ /osdt_cert.*\.jar/ || 
+            it.name =~ /osdt_core.*\.jar/ ||
+            it.name =~ /ojdbc8.*\.jar/
+        }).collect {
+            zipTree(it)
+        } + 
+        configurations.compileClasspath.filter({
+            it.path =~ /.*main/
+            // Unlike earlier versions of gradle, project dependencies are not showing up as a jar file in classpath
+            // Instead they show up as sourceset paths. Examples below...
+            // /Users/oletiman/iSource/cpde-projects/ds-generic-components/spark-adp-commons/build/classes/java/main
+            // /Users/oletiman/iSource/cpde-projects/ds-generic-components/spark-adp-commons/build/classes/scala/main
+        }).collect {
+            fileTree(it.path)
+        }
+    }
+}

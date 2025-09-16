@@ -1,0 +1,1680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cubes>
+    <cube>
+        <name>ventures_fprr_core_cube_monthly</name>
+
+		<filters>
+			<filter>work_state != 'PR'</filter>
+			<filter>home_state != 'PR'</filter>
+		</filters>
+
+        <dimensions>
+            <dimension mandatory="true">report_yyyymm</dimension>
+            <dimension mandatory="true">yyyymm</dimension>
+        
+            <dimension max-depth="4">tenure_grp</dimension>
+			
+            <hierarchy>
+		<dimension>naics2</dimension>
+		<dimension>naics4</dimension>
+		<dimension>naics6</dimension>
+	    </hierarchy>
+
+            <hierarchy>
+                <dimension>home_state</dimension>
+                <dimension>home_county</dimension>
+                <dimension>home_tract</dimension>
+                <dimension>home_block_group</dimension>
+                <dimension>home_block</dimension>
+            </hierarchy>
+
+            <dimension xor-group-name="location">home_zip</dimension>
+            <dimension xor-group-name="location">home_msa</dimension>
+            <dimension xor-group-name="location">work_zip</dimension>
+            <dimension xor-group-name="location">work_msa</dimension>
+
+            <hierarchy>
+                <dimension xor-group-name="location">work_state</dimension>
+                <dimension>work_county</dimension>
+                <dimension>work_tract</dimension>
+                <dimension>work_block_group</dimension>
+                <dimension>work_block</dimension>
+            </hierarchy>
+
+            <hierarchy>
+                <dimension xor-group-name="job">onet_job_family</dimension>
+                <dimension xor-group-name="job">minor_group_title</dimension>
+                <dimension xor-group-name="job">onet</dimension>
+                <dimension xor-group-name="job">onet_cd</dimension>
+            </hierarchy>
+        </dimensions>
+
+        <facts>
+            <fact>
+                <name>employer_cnt</name>
+                <column>ooid</column>
+                <aggregation>
+                    <type>APPROX_COUNT_DISTINCT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ee_cnt</name>
+                <column>employee_guid</column>
+                <aggregation>
+                    <type>APPROX_COUNT_DISTINCT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_m</name>
+                <column>age</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_16_17_cnt</name>
+                <column>age_16_17</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_18_24_cnt</name>
+                <column>age_18_24</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_25_34_cnt</name>
+                <column>age_25_34</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_35_54_cnt</name>
+                <column>age_35_54</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_55_64_cnt</name>
+                <column>age_55_64</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_nt_cnt</name>
+                <column>age_nt</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gender_cnt</name>
+                <column>gender</column>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>mle_cnt</name>
+                <column>mle</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>fem_cnt</name>
+                <column>fem</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gender_nt_cnt</name>
+                <column>gender_nt</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>new_hire_fg_cnt</name>
+                <column>new_hire_fg</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_m</name>
+                <column>tenure</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_0_2yr_cnt</name>
+                <column>junior</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_3_7yr_cnt</name>
+                <column>mid_level</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_8yr_p_cnt</name>
+                <column>senior</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_type_cnt</name>
+                <column>rate_type</column>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_type_s_cnt</name>
+                <column>rate_type_s</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_type_d_cnt</name>
+                <column>rate_type_d</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_type_hrly_cnt</name>
+                <column>rate_type_hrly</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_freq_cnt</name>
+                <column>pay_freq</column>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_wkly_cnt</name>
+                <column>pay_wkly</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_bw_cnt</name>
+                <column>pay_bw</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_sm_cnt</name>
+                <column>pay_sm</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_mthly_cnt</name>
+                <column>pay_mthly</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_d_cnt</name>
+                <column>pay_d</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_5pt2wks_cnt</name>
+                <column>pay_5pt2wks</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_2pt6wks_cnt</name>
+                <column>pay_2pt6wks</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pay_4wks_cnt</name>
+                <column>pay_4wks</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_s_m</name>
+                <column>rate_amt_s</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_s_sd</name>
+                <column>rate_amt_s</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_s_</name>
+                <column>rate_amt_s</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_hrly_m</name>
+                <column>rate_amt_hrly</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_hrly_sd</name>
+                <column>rate_amt_hrly</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_hrly_</name>
+                <column>rate_amt_hrly</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_d_m</name>
+                <column>rate_amt_d</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_d_sd</name>
+                <column>rate_amt_d</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>rate_amt_d_</name>
+                <column>rate_amt_d</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>full_tm_part_tm_cnt</name>
+                <column>full_tm_part_tm</column>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>pt_tm_cnt</name>
+                <column>pt_tm</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>full_tm_cnt</name>
+                <column>full_tm</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ot_hrs_m</name>
+                <column>ot_hrs</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ot_hrs_sd</name>
+                <column>ot_hrs</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ot_pay_m</name>
+                <column>ot_pay</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ot_pay_sd</name>
+                <column>ot_pay</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>marital_st_cnt</name>
+                <column>marital_st</column>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>md_cnt</name>
+                <column>md</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>sgl_cnt</name>
+                <column>sgl</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>net_pay_m</name>
+                <column>net_pay</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>net_pay_sd</name>
+                <column>net_pay</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>net_pay_</name>
+                <column>net_pay</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gross_pay_m</name>
+                <column>gross_pay</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gross_pay_sd</name>
+                <column>gross_pay</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gross_pay_</name>
+                <column>gross_pay</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_m</name>
+                <column>ann_gross_pay_obs</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_sd</name>
+                <column>ann_gross_pay_obs</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_</name>
+                <column>ann_gross_pay_obs</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_m</name>
+                <column>ann_gross_pay_proj</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_sd</name>
+                <column>ann_gross_pay_proj</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_</name>
+                <column>ann_gross_pay_proj</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_net_pay_obs_m</name>
+                <column>ann_net_pay_obs</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_net_pay_obs_sd</name>
+                <column>ann_net_pay_obs</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_net_pay_obs_</name>
+                <column>ann_net_pay_obs</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_net_pay_proj_m</name>
+                <column>ann_net_pay_proj</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_net_pay_proj_sd</name>
+                <column>ann_net_pay_proj</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_net_pay_proj_</name>
+                <column>ann_net_pay_proj</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_m</name>
+                <column>ann_gross_pay_obs_mle</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_sd</name>
+                <column>ann_gross_pay_obs_mle</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_</name>
+                <column>ann_gross_pay_obs_mle</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_m</name>
+                <column>ann_gross_pay_obs_fem</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_sd</name>
+                <column>ann_gross_pay_obs_fem</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_</name>
+                <column>ann_gross_pay_obs_fem</column>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_s_m</name>
+                <column>ann_gross_pay_obs_mle_s</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_hrly_m</name>
+                <column>ann_gross_pay_obs_mle_hrly</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_s_m</name>
+                <column>ann_gross_pay_obs_fem_s</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_hrly_m</name>
+                <column>ann_gross_pay_obs_fem_hrly</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_mle_m</name>
+                <column>ann_gross_pay_proj_mle</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_fem_m</name>
+                <column>ann_gross_pay_proj_fem</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_mle_s_m</name>
+                <column>ann_gross_pay_proj_mle_s</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_mle_hrly_m</name>
+                <column>ann_gross_pay_proj_mle_hrly</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_fem_s_m</name>
+                <column>ann_gross_pay_proj_fem_s</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_fem_hrly_m</name>
+                <column>ann_gross_pay_proj_fem_hrly</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>bonus_m</name>
+                <column>bonus</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>bonus_sd</name>
+                <column>bonus</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_bonus_m</name>
+                <column>ann_bonus</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_bonus_sd</name>
+                <column>ann_bonus</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>reg_pay_m</name>
+                <column>reg_pay</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>reg_pay_sd</name>
+                <column>reg_pay</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>reg_hrs_m</name>
+                <column>reg_hrs</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>reg_hrs_sd</name>
+                <column>reg_hrs</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gen_cnt</name>
+                <column>gen</column>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>silent_gen_cnt</name>
+                <column>silent_gen</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gen_bb_cnt</name>
+                <column>gen_bb</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gen_x_cnt</name>
+                <column>gen_x</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gen_y_cnt</name>
+                <column>gen_y</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>gen_nt_cnt</name>
+                <column>gen_nt</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_silent_gen_m</name>
+                <column>ann_gross_pay_obs_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_silent_gen_m</name>
+                <column>ann_gross_pay_obs_fem_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_silent_gen_m</name>
+                <column>ann_gross_pay_obs_fem_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_gen_bb_m</name>
+                <column>ann_gross_pay_obs_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_gen_bb_m</name>
+                <column>ann_gross_pay_obs_mle_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_gen_bb_m</name>
+                <column>ann_gross_pay_obs_fem_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_gen_x_m</name>
+                <column>ann_gross_pay_obs_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_gen_x_m</name>
+                <column>ann_gross_pay_obs_mle_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_gen_x_m</name>
+                <column>ann_gross_pay_obs_fem_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_gen_y_m</name>
+                <column>ann_gross_pay_obs_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_gen_y_m</name>
+                <column>ann_gross_pay_obs_mle_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_gen_y_m</name>
+                <column>ann_gross_pay_obs_fem_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_silent_gen_m</name>
+                <column>ann_gross_pay_proj_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_mle_silent_gen_m</name>
+                <column>ann_gross_pay_proj_mle_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_fem_silent_gen_m</name>
+                <column>ann_gross_pay_proj_fem_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_gen_bb_m</name>
+                <column>ann_gross_pay_proj_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_mle_gen_bb_m</name>
+                <column>ann_gross_pay_proj_mle_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_fem_gen_bb_m</name>
+                <column>ann_gross_pay_proj_fem_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_gen_x_m</name>
+                <column>ann_gross_pay_proj_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_mle_gen_x_m</name>
+                <column>ann_gross_pay_proj_mle_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_fem_gen_x_m</name>
+                <column>ann_gross_pay_proj_fem_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_gen_y_m</name>
+                <column>ann_gross_pay_proj_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_mle_gen_y_m</name>
+                <column>ann_gross_pay_proj_mle_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_fem_gen_y_m</name>
+                <column>ann_gross_pay_proj_fem_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_silent_gen_m</name>
+                <column>tenure_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_silent_gen_m</name>
+                <column>tenure_mle_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_silent_gen_m</name>
+                <column>tenure_fem_silent_gen</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_gen_bb_m</name>
+                <column>tenure_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_gen_bb_m</name>
+                <column>tenure_mle_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_gen_bb_m</name>
+                <column>tenure_fem_gen_bb</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_gen_x_m</name>
+                <column>tenure_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_gen_x_m</name>
+                <column>tenure_mle_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_gen_x_m</name>
+                <column>tenure_fem_gen_x</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_gen_y_m</name>
+                <column>tenure_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_gen_y_m</name>
+                <column>tenure_mle_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_gen_y_m</name>
+                <column>tenure_fem_gen_y</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>reg_temp_cnt</name>
+                <column>reg_temp</column>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>reg_cnt</name>
+                <column>reg</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>temp_cnt</name>
+                <column>temp</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>reg_temp_nt_cnt</name>
+                <column>reg_temp_nt</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_temp_m</name>
+                <column>ann_gross_pay_obs_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_mle_temp_m</name>
+                <column>ann_gross_pay_obs_mle_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_obs_fem_temp_m</name>
+                <column>ann_gross_pay_obs_fem_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_temp_m</name>
+                <column>ann_gross_pay_proj_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_mle_temp_m</name>
+                <column>ann_gross_pay_proj_mle_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_gross_pay_proj_fem_temp_m</name>
+                <column>ann_gross_pay_proj_fem_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_temp_m</name>
+                <column>age_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_mle_temp_m</name>
+                <column>age_mle_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_fem_temp_m</name>
+                <column>age_fem_temp</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_lvl_income_cnt</name>
+                <column>ann_lvl_income</column>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_lvl_below_10k_cnt</name>
+                <column>ann_lvl_below_10k</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_lvl_ent_cnt</name>
+                <column>ann_lvl_ent</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_lvl_mid_cnt</name>
+                <column>ann_lvl_mid</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_lvl_upr_mid_cnt</name>
+                <column>ann_lvl_upr_mid</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_lvl_high_cnt</name>
+                <column>ann_lvl_high</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_lvl_six_fig_cnt</name>
+                <column>ann_lvl_six_fig</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ann_lvl_income_nt_cnt</name>
+                <column>ann_lvl_income_nt</column>
+                <aggregation>
+                    <type>SUM</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_ann_lvl_below_10k_m</name>
+                <column>tenure_ann_lvl_below_10k</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_ann_lvl_below_10k_m</name>
+                <column>tenure_mle_ann_lvl_below_10k</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_ann_lvl_below_10k_m</name>
+                <column>tenure_fem_ann_lvl_below_10k</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_ann_lvl_ent_m</name>
+                <column>tenure_ann_lvl_ent</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_ann_lvl_ent_m</name>
+                <column>tenure_mle_ann_lvl_ent</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_ann_lvl_ent_m</name>
+                <column>tenure_fem_ann_lvl_ent</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_ann_lvl_mid_m</name>
+                <column>tenure_ann_lvl_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_ann_lvl_mid_m</name>
+                <column>tenure_mle_ann_lvl_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_ann_lvl_mid_m</name>
+                <column>tenure_fem_ann_lvl_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_ann_lvl_upr_mid_m</name>
+                <column>tenure_ann_lvl_upr_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_ann_lvl_upr_mid_m</name>
+                <column>tenure_mle_ann_lvl_upr_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_ann_lvl_upr_mid_m</name>
+                <column>tenure_fem_ann_lvl_upr_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_ann_lvl_high_m</name>
+                <column>tenure_ann_lvl_high</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_ann_lvl_high_m</name>
+                <column>tenure_mle_ann_lvl_high</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_ann_lvl_high_m</name>
+                <column>tenure_fem_ann_lvl_high</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_ann_lvl_six_fig_m</name>
+                <column>tenure_ann_lvl_six_fig</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_ann_lvl_six_fig_m</name>
+                <column>tenure_mle_ann_lvl_six_fig</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_ann_lvl_six_fig_m</name>
+                <column>tenure_fem_ann_lvl_six_fig</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_ann_lvl_below_10k_m</name>
+                <column>age_ann_lvl_below_10k</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_mle_ann_lvl_below_10k_m</name>
+                <column>age_mle_ann_lvl_below_10k</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_fem_ann_lvl_below_10k_m</name>
+                <column>age_fem_ann_lvl_below_10k</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_ann_lvl_ent_m</name>
+                <column>age_ann_lvl_ent</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_mle_ann_lvl_ent_m</name>
+                <column>age_mle_ann_lvl_ent</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_fem_ann_lvl_ent_m</name>
+                <column>age_fem_ann_lvl_ent</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_ann_lvl_mid_m</name>
+                <column>age_ann_lvl_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_mle_ann_lvl_mid_m</name>
+                <column>age_mle_ann_lvl_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_fem_ann_lvl_mid_m</name>
+                <column>age_fem_ann_lvl_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_ann_lvl_upr_mid_m</name>
+                <column>age_ann_lvl_upr_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_mle_ann_lvl_upr_mid_m</name>
+                <column>age_mle_ann_lvl_upr_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_fem_ann_lvl_upr_mid_m</name>
+                <column>age_fem_ann_lvl_upr_mid</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_ann_lvl_high_m</name>
+                <column>age_ann_lvl_high</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_mle_ann_lvl_high_m</name>
+                <column>age_mle_ann_lvl_high</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_fem_ann_lvl_high_m</name>
+                <column>age_fem_ann_lvl_high</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_ann_lvl_six_fig_m</name>
+                <column>age_ann_lvl_six_fig</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_mle_ann_lvl_six_fig_m</name>
+                <column>age_mle_ann_lvl_six_fig</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>age_fem_ann_lvl_six_fig_m</name>
+                <column>age_fem_ann_lvl_six_fig</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_m</name>
+                <column>tenure_mle</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_m</name>
+                <column>tenure_fem</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_hrly_m</name>
+                <column>tenure_mle_hrly</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_mle_s_m</name>
+                <column>tenure_mle_s</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_hrly_m</name>
+                <column>tenure_fem_hrly</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>tenure_fem_s_m</name>
+                <column>tenure_fem_s</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>commute_dist_m</name>
+                <column>commute_dist</column>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>commute_dist_sd</name>
+                <column>commute_dist</column>
+                <aggregation>
+                    <type>STDDEV</type>
+                </aggregation>
+            </fact>
+        </facts>
+    </cube>
+</cubes>

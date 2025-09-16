@@ -1,0 +1,38 @@
+bundle:
+    name: insights
+variables:
+    environment_name:
+        default: DIT
+    codestore_bucket:
+        default: datacloud-datascience-code-store-708035784431tf
+    aws_account_id:
+        default: '708035784431'
+    glue_catalogid:
+        default: '591853665740'
+    log_uri:
+        default: s3://dslogs-datacloud-nonprod-us-east-1/databricks
+include:
+  - resources/*.yml
+targets:
+    dev:
+        mode: development
+        default: true
+        workspace:
+            host: https://adpdc-tech-ingestion-dev.cloud.databricks.com
+    fit:
+        mode: development
+        default: false
+        workspace:
+            host: https://adpdc-tech-ingestion-fit.cloud.databricks.com
+    iat:
+        mode: development
+        default: false
+        workspace:
+            host: https://adpdc-edp-lakehouse-iat.cloud.databricks.com
+    prod:
+        mode: production
+        default: false
+        workspace:
+            host: https://adpdc-tech-ingestion-prod.cloud.databricks.com
+        run_as:
+            user_name: dc-dp-prod@adp.com

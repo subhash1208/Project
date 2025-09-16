@@ -1,0 +1,34 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation files('../shadow-libs/postgresql-42.2.14.jar')
+    implementation('com.adp.datacloud.ds:adp-crypt-functions:2.5') { transitive = false }
+    implementation('com.microsoft.sqlserver:sqljdbc4:4.2') { transitive = false }
+    implementation('mysql:mysql-connector-java:8.0.20') { transitive = false }
+    implementation("com.amazon.redshift:redshift-jdbc42:2.1.0.3") { transitive = false }
+    implementation("org.elasticsearch:elasticsearch-spark-30_${scalaVersion}:8.3.3") { transitive = false }
+    // implementation("org.elasticsearch:elasticsearch-spark-20_${scalaVersion}:7.12.0") { transitive = false }
+    implementation("org.mongodb.spark:mongo-spark-connector_${scalaVersion}:${mongodbDriverVersion}") { exclude group: 'org.scala-lang' }
+    implementation("net.snowflake:spark-snowflake_${scalaVersion}:2.8.4-spark_2.4") { exclude group: 'org.scala-lang' }
+    // oracle wallet jars
+    implementation("com.oracle.database.jdbc:ojdbc8:${orcleWalletJarsVersion}") { transitive = false }
+    implementation("com.oracle.database.security:oraclepki:${orcleWalletJarsVersion}") { transitive = false }
+    implementation("com.oracle.database.security:osdt_cert:${orcleWalletJarsVersion}") { transitive = false }
+    implementation("com.oracle.database.security:osdt_core:${orcleWalletJarsVersion}") { transitive = false }
+    implementation("io.github.spark-redshift-community:spark-redshift_${scalaVersion}:5.0.3") { transitive = false }
+    testImplementation("org.apache.spark:spark-avro_${scalaVersion}:${sparkVersion}")
+}
+
+jar {
+    // Make a fatjar by adding other dependency jars & drivers
+    // For the sake of ease of use, we will work around jarsigning issues while creating fatjars
+    // Certain oracle jars are signed jars, and we will make them unsigned while embedding
+    from(configurations.runtimeClasspath.collect {
+        it.isDirectory() ? it : zipTree(it)
+    })
+            {
+                exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+            }
+}

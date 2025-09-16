@@ -1,0 +1,15 @@
+{
+    "job_name": "env_migration_drop_tables_emi_migration_pipeline_ditoc",
+    "job_tags": {
+        "Application": "datacloud-data_science-dwh",
+        "BusinessUnit": "datacloud",
+        "DatabricksGroup": "datacloud-data_science-dwh",
+        "OwnerDetails": "DS.ARCH@ADP.COM",
+        "ResourceOwner1": "Datacloud DS Architecture",
+        "ResourceOwner2": "ComponentTeam",
+        "Function": "dwh",
+        "Project": "insights"
+    },
+    "job_parameters": [],
+    "is_sql": true
+}

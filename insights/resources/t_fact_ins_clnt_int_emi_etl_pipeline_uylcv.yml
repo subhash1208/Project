@@ -1,0 +1,66 @@
+resources:
+    jobs:
+        t_fact_ins_clnt_int_emi_etl_pipeline_uylcv:
+            name: t_fact_ins_clnt_int_emi_etl_pipeline_uylcv
+            tasks:
+              - task_key: task1_t_fact_ins_clnt_int
+                job_cluster_key: notebook-application_AzIut
+                notebook_task:
+                    notebook_path: ../src/etl/prepare_exports/t_fact_ins_clnt_int.sql
+                libraries:
+                  - maven:
+                        coordinates: com.amazonaws:aws-java-sdk-secretsmanager:1.11.595
+                        repo: https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote
+                  - maven:
+                        coordinates: com.amazonaws:aws-java-sdk-comprehend:1.11.595
+                        repo: https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote
+                  - maven:
+                        coordinates: com.amazon.emr:emr-dynamodb-hadoop:4.16.0
+                        repo: https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote
+            job_clusters:
+              - job_cluster_key: notebook-application_AzIut
+                new_cluster:
+                    autoscale:
+                        max_workers: 20
+                        min_workers: 1
+                    aws_attributes:
+                        availability: ON_DEMAND
+                        ebs_volume_count: 1
+                        ebs_volume_size: 100
+                        ebs_volume_type: GENERAL_PURPOSE_SSD
+                        first_on_demand: 1
+                        instance_profile_arn: 
+                            arn:aws:iam::${var.aws_account_id}:instance-profile/databricks-dataplatform-dev-roletf
+                        spot_bid_price_percent: 100
+                        zone_id: auto
+                    cluster_log_conf:
+                        s3:
+                            canned_acl: bucket-owner-full-control
+                            destination: ${var.log_uri}
+                            enable_encryption: true
+                            region: us-east-1
+                    custom_tags:
+                        Application: DC_Analytics
+                        OwnerDetails: DS.ARCH@ADP.COM
+                        Function: Databricks Cluster for Datacloud Data Science
+                        ApplicationTier: App tier
+                        ResourceOwner1: Datacloud DS Architecture
+                        DataClassification: ADP Confidential
+                        ApplicationVersion: 0.1
+                        Environment: ${var.environment_name}
+                        ComponentTeam: Analytics-Experience
+                    data_security_mode: NONE
+                    enable_elastic_disk: true
+                    init_scripts:
+                      - s3:
+                            destination: s3://${var.codestore_bucket}/orchestration_artifacts/databricks_bootstrap.sh
+                            region: ''
+                    node_type_id: m5d.4xlarge
+                    spark_conf:
+                        spark.sql.adaptive.enabled: 'true'
+                        spark.sql.sources.partitionOverwriteMode: dynamic
+                        spark.executor.extraJavaOptions: -Duser.timezone=America/New_York
+                        spark.driver.extraJavaOptions: -Duser.timezone=America/New_York
+                        spark.databricks.hive.metastore.glueCatalog.enabled: 'true'
+                        spark.hadoop.hive.metastore.glue.catalogid: ${var.glue_catalogid}
+                    spark_version: 10.4.x-cpu-ml-scala2.12

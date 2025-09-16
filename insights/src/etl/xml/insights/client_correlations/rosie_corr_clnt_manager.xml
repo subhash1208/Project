@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>rosie_corr_clnt_manager</name>
+	<type>CUBECORRELATIONS</type>
+
+	<dimensions>
+		<dimension alwayson="true">clnt_obj_id</dimension>
+		<dimension alwayson="true">mngr_pers_obj_id</dimension>
+		<dimension>qtr_cd</dimension>
+		<dimension>d_job_cd</dimension>
+
+
+	</dimensions>
+
+	<facts>
+		<fact>
+			<name>lead_turnover_rate</name>
+            <name>overtime_perc</name>
+            <name>leave_perc</name>
+            <name>absence_perc</name>
+		</fact>
+	</facts>
+
+</insights>

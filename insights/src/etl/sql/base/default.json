@@ -1,0 +1,16 @@
+{
+  "spark-config": {
+    "executor-cores": 5,
+    "executor-memory": 30,
+    "driver-cores": 5,
+    "driver-memory": 30,
+    "num-shuffle-partitions": 800,
+    "executor-memory-overhead": 7200,
+    "conf": {
+      "spark.driver.maxResultSize": "24G",
+      "spark.sql.analyzer.failAmbiguousSelfJoin": "false",
+      "spark.sql.storeAssignmentPolicy": "legacy",
+      "spark.sql.legacy.timeParserPolicy": "legacy"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+    "dxr-product-name": "oracle_tgt_query.sql",
+    "hive-table": "${hiveconf:__BLUE_MAIN_DB__}.t_fact_empl_ins_stg",
+    "target-rdbms-table": "t_fact_empl_ins_stg",
+    "pre-sql-content": "emi_dw_empl_pre_export.sql",
+    "post-sql-content": "emi_dw_empl_post_export.sql",
+    "plsql-timeout": 18000
+}

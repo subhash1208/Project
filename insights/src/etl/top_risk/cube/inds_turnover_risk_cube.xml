@@ -1,0 +1,262 @@
+<cubes>
+	<cube>
+		<name>inds_turnover_risk_cube</name>
+		<type>SIMPLE</type>
+		<dimensions>
+			<dimension mandatory="true">qtr</dimension>
+			<dimension xor-group-name="industry">supersector_cd</dimension>
+            <dimension xor-group-name="industry">sector_cd</dimension>
+            <!-- <dimension xor-group-name="industry">subsector_cd</dimension> 
+            <dimension xor-group-name="industry">combo_cd</dimension>
+            <dimension xor-group-name="industry">naics_cd</dimension> -->
+			<!--dimension mandatory="true">job_cd</dimension>
+			<dimension>full_tm_part_tm_cd</dimension>
+			<dimension>reg_temp_cd</dimension-->
+			<dimension mandatory="true">adp_lens_cd</dimension>
+		</dimensions>
+		<facts>
+			<fact>
+				<name>empl_count</name>
+				<column>pers_obj_id</column>
+				<aggregation>
+					<type>APPROX_COUNT_DISTINCT</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>clnt_count</name>
+				<column>clnt_obj_id</column>
+				<aggregation>
+					<type>APPROX_COUNT_DISTINCT</type>
+				</aggregation>
+			</fact>
+			<!--fact>
+				<name>annl_cmpn_amt_nor</name>
+				<column>log_annl_cmpn_amt</column>
+				<aggregation>
+					<type>PERCENTILE_APPROX</type>
+					<arguments>
+						<argument>25,75</argument>
+					</arguments>
+				</aggregation>
+			</fact-->
+			<fact>
+				<name>annl_cmpn_amt</name>
+				<column>annl_cmpn_amt</column>
+				<aggregation>
+					<type>PERCENTILE_APPROX</type>
+					<arguments>
+						<argument>50</argument>
+					</arguments>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>annl_cmpn_amt_org_mean</name>
+				<column>annl_cmpn_amt</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>annl_cmpn_amt_nor_mean</name>
+				<column>log_annl_cmpn_amt</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>annl_cmpn_amt_org_stddev</name>
+				<column>annl_cmpn_amt</column>
+				<aggregation>
+					<type>STDDEV</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>annl_cmpn_amt_nor_stddev</name>
+				<column>log_annl_cmpn_amt</column>
+				<aggregation>
+					<type>STDDEV</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>qtrs_since_last_promotion</name>
+				<column>qtrs_since_last_promotion</column>
+				<aggregation>
+					<type>PERCENTILE_APPROX</type>
+					<excludezeros>true</excludezeros>
+					<arguments>
+						<argument>50</argument>
+						<argument>5000</argument>
+						<argument>true</argument>
+					</arguments>
+				</aggregation>
+			</fact>
+			<!--fact>
+				<name>qtrs_since_last_promotion_nor</name>
+				<column>log_qtrs_since_last_promotion</column>
+				<aggregation>
+					<type>PERCENTILE_APPROX</type>
+					<excludezeros>true</excludezeros>
+					<arguments>
+						<argument>25,75</argument>
+						<argument>5000</argument>
+						<argument>true</argument>
+					</arguments>
+				</aggregation>
+			</fact-->
+			<fact>
+				<name>qtrs_since_last_promotion_org_mean</name>
+				<column>qtrs_since_last_promotion</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>qtrs_since_last_promotion_nor_mean</name>
+				<column>log_qtrs_since_last_promotion</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>qtrs_since_last_promotion_org_stddev</name>
+				<column>qtrs_since_last_promotion</column>
+				<aggregation>
+					<type>STDDEV</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>qtrs_since_last_promotion_nor_stddev</name>
+				<column>log_qtrs_since_last_promotion</column>
+				<aggregation>
+					<type>STDDEV</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>overtime_dbltime_hours</name>
+				<column>overtime_dbltime_hours</column>
+				<aggregation>
+					<type>PERCENTILE_APPROX</type>
+					<default>0</default>
+					<!--inclusionrange>0,200</inclusionrange-->
+					<arguments>
+						<argument>50</argument>
+					</arguments>
+				</aggregation>
+			</fact>
+			<!--fact>
+				<name>overtime_dbltime_hours_nor</name>
+				<column>log_overtime_dbltime_hours</column>
+				<aggregation>
+					<type>PERCENTILE_APPROX</type>
+					<default>0</default>
+					<inclusionrange>0,200</inclusionrange>
+					<arguments>
+						<argument>25,75</argument>
+					</arguments>
+				</aggregation>
+			</fact-->
+			<fact>
+				<name>overtime_dbltime_hours_org_mean</name>
+				<column>overtime_dbltime_hours</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>overtime_dbltime_hours_nor_mean</name>
+				<column>log_overtime_dbltime_hours</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>overtime_dbltime_hours_org_stddev</name>
+				<column>overtime_dbltime_hours</column>
+				<aggregation>
+					<type>STDDEV</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>overtime_dbltime_hours_nor_stddev</name>
+				<column>log_overtime_dbltime_hours</column>
+				<aggregation>
+					<type>STDDEV</type>
+				</aggregation>
+			</fact>
+		</facts>
+		<!--postprocess>
+			<column>
+				<name>annl_cmpn_amt_org_iqr_diff</name>
+				<expr>annl_cmpn_amt_org_75th_percentile - annl_cmpn_amt_org_25th_percentile</expr>
+			</column>
+			<column>
+				<name>annl_cmpn_amt_nor_iqr_diff</name>
+				<expr>annl_cmpn_amt_nor_75th_percentile - annl_cmpn_amt_nor_25th_percentile</expr>
+			</column>
+            <column>
+				<name>annl_cmpn_amt_org_iqr_lower_outlier</name>
+				<expr>annl_cmpn_amt_org_25th_percentile - (1.25 * (annl_cmpn_amt_org_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>annl_cmpn_amt_nor_iqr_lower_outlier</name>
+				<expr>annl_cmpn_amt_nor_25th_percentile - (1.25 * (annl_cmpn_amt_nor_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>annl_cmpn_amt_org_iqr_upper_outlier</name>
+				<expr>annl_cmpn_amt_org_75th_percentile + (1.25 * (annl_cmpn_amt_org_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>annl_cmpn_amt_nor_iqr_upper_outlier</name>
+				<expr>annl_cmpn_amt_nor_75th_percentile + (1.25 * (annl_cmpn_amt_nor_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>qtrs_since_last_promotion_org_iqr_diff</name>
+				<expr>qtrs_since_last_promotion_org_75th_percentile - qtrs_since_last_promotion_org_25th_percentile</expr>
+			</column>
+			<column>
+				<name>qtrs_since_last_promotion_nor_iqr_diff</name>
+				<expr>qtrs_since_last_promotion_nor_75th_percentile - qtrs_since_last_promotion_nor_25th_percentile</expr>
+			</column>
+            <column>
+				<name>qtrs_since_last_promotion_org_iqr_lower_outlier</name>
+				<expr>qtrs_since_last_promotion_org_25th_percentile - (1.25 * (qtrs_since_last_promotion_org_iqr_diff))</expr>
+			</column> 
+			<column>
+				<name>qtrs_since_last_promotion_nor_iqr_lower_outlier</name>
+				<expr>qtrs_since_last_promotion_nor_25th_percentile - (1.25 * (qtrs_since_last_promotion_nor_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>qtrs_since_last_promotion_org_iqr_upper_outlier</name>
+				<expr>qtrs_since_last_promotion_org_75th_percentile + (1.25 * (qtrs_since_last_promotion_org_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>qtrs_since_last_promotion_nor_iqr_upper_outlier</name>
+				<expr>qtrs_since_last_promotion_nor_75th_percentile + (1.25 * (qtrs_since_last_promotion_nor_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>overtime_dbltime_hours_org_iqr_diff</name>
+				<expr>overtime_dbltime_hours_org_75th_percentile - overtime_dbltime_hours_org_25th_percentile</expr>
+			</column>
+			<column>
+				<name>overtime_dbltime_hours_nor_iqr_diff</name>
+				<expr>overtime_dbltime_hours_nor_75th_percentile - overtime_dbltime_hours_nor_25th_percentile</expr>
+			</column>
+            <column>
+				<name>overtime_dbltime_hours_org_iqr_lower_outlier</name>
+				<expr>overtime_dbltime_hours_org_25th_percentile - (1.25 * (overtime_dbltime_hours_org_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>overtime_dbltime_hours_nor_iqr_lower_outlier</name>
+				<expr>overtime_dbltime_hours_nor_25th_percentile - (1.25 * (overtime_dbltime_hours_nor_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>overtime_dbltime_hours_org_iqr_upper_outlier</name>
+				<expr>overtime_dbltime_hours_org_75th_percentile + (1.25 * (overtime_dbltime_hours_org_iqr_diff))</expr>
+			</column>
+			<column>
+				<name>overtime_dbltime_hours_nor_iqr_upper_outlier</name>
+				<expr>overtime_dbltime_hours_nor_75th_percentile + (1.25 * (overtime_dbltime_hours_nor_iqr_diff))</expr>
+			</column>
+		</postprocess-->
+	</cube>
+</cubes>

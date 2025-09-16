@@ -1,0 +1,20 @@
+{
+    "job_name": "emi_t_kpi_emi_load_t_kpi_wclce",
+    "job_tags": {
+        "Application": "datacloud-data_science-dwh",
+        "BusinessUnit": "datacloud",
+        "DatabricksGroup": "datacloud-data_science-dwh",
+        "OwnerDetails": "DS.ARCH@ADP.COM",
+        "ResourceOwner1": "Datacloud DS Architecture",
+        "ResourceOwner2": "ComponentTeam",
+        "Function": "dwh",
+        "Project": "insights"
+    },
+    "job_parameters": [
+        {
+            "key": "__BLUE_MAIN_DB__",
+            "value": "{{__BLUE_MAIN_DB__}}"
+        }
+    ],
+    "is_sql": true
+}

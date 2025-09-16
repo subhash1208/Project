@@ -1,0 +1,37 @@
+{
+  "_description": "EMI Load Insights_T_KPI",
+  "application-name": "Load_Insights_T_KPI",
+  "notebook-file": "Load_T_KPI.py",
+  "files": [],
+  "spark-config": {
+    "driver-cores": 5,
+    "driver-memory": 15,
+    "num-shuffle-partitions": 1600,
+    "conf": {
+      "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+        "spark.sql.broadcastTimeout":"36000",
+        "spark.driver.memoryOverhead": "2G",
+        "spark.kryoserializer.buffer.max": "1024m",
+        "spark.default.parallelism": 1600,
+        "spark.sql.analyzer.failAmbiguousSelfJoin": "false",
+        "spark.sql.storeAssignmentPolicy": "legacy",
+        "spark.sql.legacy.timeParserPolicy": "legacy"
+      }
+  },    
+  "notebook-param": [
+      {
+          "key": "__BLUE_MAIN_DB__",
+          "value": "{{__BLUE_MAIN_DB__}}"
+      }
+  ],
+  "jobcluster-config": {
+    "databricks-version": "10.5.x-cpu-ml-scala2.12",
+    "libraries": [
+        {
+          "pypi": {
+            "package": "pandas"
+          }
+        }
+      ]
+    }
+}

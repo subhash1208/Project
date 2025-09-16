@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sequence of levels within each feature is important. The first match is always picked 
+Levels may repeat to adjust for match priority-->
+<features>
+	<feature name="full_tm_part_tm_dsc" default="FULL_TIME">
+		<levels>
+			<level name="PART_TIME">
+				<match>PART[\s-_]*TIME</match>
+				<match>CASUAL</match>
+				<match>TEMP</match>
+				<match>INTERMITTENT</match>
+				<match>HOURLY</match>
+				<match>PER[\s-_]*DIEM</match>
+			</level>
+		</levels>
+	</feature>
+	<feature name="flsa_stus_dsc" default="EXEMPT">
+		<levels>
+			<level name="NONEXEMPT">
+				<match>no[tn][\s-_]*exempt</match>
+				<match>^flsa[\s-_]*required</match>
+			</level>
+		</levels>
+	</feature>
+	<feature name="reg_temp_dsc" default="REGULAR">
+		<levels>
+			<level name="TEMPORARY">
+				<match>seasonal</match>
+				<match>temp</match>
+				<match>non[\s-_]+reg</match>
+				<match>non[\s-_]+sched</match>
+			</level>
+		</levels>
+	</feature>
+	<feature name="martl_stus_dsc">
+		<levels>
+			<level name="SINGLE">
+				<match>single</match>
+				<match>no[tn][\s-_]+married</match>
+				<match>un[\s-_]?married</match>
+			</level>
+			<level name="MARRIED">
+				<match>partner</match>
+				<match>union</match>
+			</level>
+			<level name="WIDOWED">
+				<match>widow</match>
+			</level>
+			<level name="DIVORCED">
+				<match>divorce</match>
+				<match>separa</match>
+			</level>
+			<level name="MARRIED">
+				<match>married</match>
+				<match>non[\s-_]?reg</match>
+				<match>non[\s-_]?sched</match>
+			</level>
+		</levels>
+	</feature>
+	<feature name="pay_rt_type_dsc" default="SALARIED">
+		<levels>
+			<level name="DAILY">
+				<match>daily</match>
+			</level>
+			<level name="HOURLY">
+				<match>hourly</match>
+			</level>
+		</levels>
+	</feature>
+</features>

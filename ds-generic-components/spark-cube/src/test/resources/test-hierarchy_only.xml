@@ -1,0 +1,72 @@
+<cubes>
+	<cube>
+		<name>hierarchy_only</name>
+		<dimensions>
+			<dimension mandatory="true">l2_code</dimension>
+	        <hierarchy>
+		        	<dimension xor-group-name="myxor">country</dimension>
+		        	<dimension>state</dimension>
+	        </hierarchy>
+	        <hierarchy>
+		        	<dimension xor-group-name="myxor">clnt_obj_id</dimension>
+		        	<dimension>state</dimension>
+	        </hierarchy>
+	        <hierarchy>
+				<dimension>region</dimension>
+				<dimension>subregion</dimension>
+			</hierarchy>
+	        <!-- <hierarchy>
+	        	<dimension>year</dimension>
+	        	<dimension>month</dimension>
+	        </hierarchy> -->
+	    </dimensions>
+	    <addons>
+	    	<!-- Addon Configuration like 
+	    		1) supporting columns needed in the frame for computations 
+	    		2) Postprocessing modules etc -->
+	    	<supportcolumns>
+	    		<column>value</column>
+	    		<!--  <column>clnt_obj_id</column>  -->
+	    	</supportcolumns>
+	    </addons>
+	    <facts>
+	        <fact>
+	        	<name>newhire_turnover_rate</name>
+	        	<expr>CASE WHEN clnt_obj_id = 'X1' THEN value ELSE null END</expr>
+	        	<when>value &lt; 365</when>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+	        </fact>
+	        <fact>
+	        	<name>valid_l2_codes</name>
+	        	<column>l2_code</column>
+	        	<aggregation>
+	        		<type>COLLECT_SET</type>
+	        	</aggregation>
+	        </fact>
+	        <fact>
+	        	<name>reg_temp_ratio</name>
+	        	<column>reg_temp_dsc</column>
+	        	<matches>X</matches>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+	        </fact>
+	        <fact>
+	        	<name>regular_percentage</name>
+	        	<column>reg_temp_dsc</column>
+	        	<matches>X</matches>
+				<aggregation>
+					<type>PERCENT</type>
+				</aggregation>
+	        </fact>
+	    </facts>
+	    <postprocess>
+	    	<column>
+	    		<name>postprocess_test</name>
+	    		<expr>regular_percentage / 25</expr>
+	    	</column>
+	    </postprocess>
+	</cube>
+</cubes>

@@ -1,0 +1,28 @@
+{
+    "job_name": "validate_emi_usr_data_in_table_emi_user_click_data_load_silas",
+    "job_tags": {
+        "Application": "datacloud-data_science-dwh",
+        "BusinessUnit": "datacloud",
+        "DatabricksGroup": "datacloud-data_science-dwh",
+        "OwnerDetails": "DS.ARCH@ADP.COM",
+        "ResourceOwner1": "Datacloud DS Architecture",
+        "ResourceOwner2": "ComponentTeam",
+        "Function": "dwh",
+        "Project": "insights"
+    },
+    "job_parameters": [
+        {
+            "key": "db_name",
+            "value": "{{__BLUE_MAIN_DB__}}"
+        },
+        {
+            "key": "table_name",
+            "value": "emi_usr_view_data"
+        },
+        {
+            "key": "expected_cols",
+            "value": "['orgid','aoid','uri','kpiid','kpiname','views_cnt']"
+        }
+    ],
+    "is_sql": true
+}

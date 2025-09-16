@@ -1,0 +1,15 @@
+{
+    "job_name": "t_ins_splunk_hist_bkp_emi_export_tables_backup_obnzy",
+    "job_tags": {
+        "Application": "datacloud-data_science-dwh",
+        "BusinessUnit": "datacloud",
+        "DatabricksGroup": "datacloud-data_science-dwh",
+        "OwnerDetails": "DS.ARCH@ADP.COM",
+        "ResourceOwner1": "Datacloud DS Architecture",
+        "ResourceOwner2": "ComponentTeam",
+        "Function": "dwh",
+        "Project": "insights"
+    },
+    "job_parameters": [],
+    "is_sql": true
+}

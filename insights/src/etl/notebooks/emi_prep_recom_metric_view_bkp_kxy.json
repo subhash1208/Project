@@ -1,0 +1,15 @@
+{
+    "job_name": "emi_prep_recom_metric_view_bkp_emi_export_tables_backup_uljfc",
+    "job_tags": {
+        "Application": "datacloud-data_science-dwh",
+        "BusinessUnit": "datacloud",
+        "DatabricksGroup": "datacloud-data_science-dwh",
+        "OwnerDetails": "DS.ARCH@ADP.COM",
+        "ResourceOwner1": "Datacloud DS Architecture",
+        "ResourceOwner2": "ComponentTeam",
+        "Function": "dwh",
+        "Project": "insights"
+    },
+    "job_parameters": [],
+    "is_sql": true
+}

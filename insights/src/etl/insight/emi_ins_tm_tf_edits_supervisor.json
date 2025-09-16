@@ -1,0 +1,21 @@
+{
+    "spark-config": {
+        "driver-cores": 5,
+        "driver-memory": 15,
+        "num-shuffle-partitions": 1600,
+        "conf": {
+          "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+            "spark.sql.broadcastTimeout":"36000",
+            "spark.driver.memoryOverhead": "2G",
+            "spark.kryoserializer.buffer.max": "1024m",
+            "spark.sql.analyzer.failAmbiguousSelfJoin": "false",
+            "spark.default.parallelism": 1600,
+            "spark.sql.storeAssignmentPolicy": "legacy",
+            "spark.sql.legacy.timeParserPolicy": "legacy"
+          }
+    },
+    "output-partition-columns": "environment", 
+    "input-sql": "emi_ins_tm_tf_edits_supervisor.sql",
+    "insight-config-xml": "emi_ins_tm_tf_edits_supervisor.xml",
+    "output-db": "{{__BLUE_MAIN_DB__}}"
+}

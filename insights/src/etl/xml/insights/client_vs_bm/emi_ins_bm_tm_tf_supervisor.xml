@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>emi_ins_bm_tm_tf_supervisor</name>
+	<type>CLIENT_VS_BM</type>
+	<score_expression> <![CDATA[
+		ROUND(
+			(CASE
+				WHEN ABS(zscore_norm_diff_[fact]) > 1 OR ABS(zscore_norm_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_norm_diff_[fact]) , ABS(zscore_norm_pctg_diff_[fact])) * 1/num_dimensions
+				WHEN ABS(zscore_diff_[fact]) > 3 OR ABS(zscore_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_diff_[fact])/3, ABS(zscore_pctg_diff_[fact])) * 1/num_dimensions
+				ELSE
+					GREATEST(
+						ABS(zscore_norm_diff_[fact]),
+						ABS(zscore_norm_pctg_diff_[fact]),
+						ABS(zscore_diff_[fact]/3),
+						ABS(zscore_pctg_diff_[fact])
+					) * 1/num_dimensions
+			END) * 2.5
+		, 2 )
+	]]></score_expression>
+
+	<dimensions>
+		<dimension type="nullvariant" alwayson="true">clnt_obj_id</dimension>
+		<dimension type="nullvariant" alwayson="true">supvr_pers_obj_id</dimension>
+		<dimension type="invariant">inds_ky</dimension>
+		<dimension type="invariant">sector_cd</dimension>
+		<dimension type="invariant">supersector_cd</dimension>
+		<dimension type="nullvariant">d_work_state_cd</dimension>
+		<hierarchy>
+			<dimension type="invariant">yr_seq_nbr</dimension>
+			<dimension type="invariant">qtr_seq_nbr</dimension>
+		</hierarchy>
+	</dimensions>
+
+	<facts>
+		<fact>
+			<name>absence_pct</name>
+            <!--name>leave_pct</name-->
+            <name>overtime_pct</name>
+            <!--name>total_hrs</name-->
+		</fact>
+	</facts>
+
+	<supportcolumns>
+	    <column>num_employees</column>
+		<column>d_job_cd</column>
+		<column>db_schema</column>
+	</supportcolumns>
+
+</insights>

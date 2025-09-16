@@ -1,0 +1,11 @@
+{
+    "_description": "splunk data extraction",
+    "application-name": "insights",
+    "notebook-file": "emi_prep_recom_metric_view.py",
+    "notebook-param": [             
+      {
+          "key": "green-main-s3-bucket",
+          "value": "{{__GREEN_MAIN_S3_BUCKET__}}"
+      }
+   ] 
+}

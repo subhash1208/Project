@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>emi_ins_intl_bm_pr_pef_practitioner</name>
+	<type>CLIENT_INTERNAL_BM</type>
+	<score_expression> <![CDATA[
+		ROUND(
+			CASE
+				WHEN ABS(zscore_norm_diff_[fact]) > 1 OR ABS(zscore_norm_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_norm_diff_[fact]) , ABS(zscore_norm_pctg_diff_[fact])) * 1/num_dimensions
+				WHEN ABS(zscore_diff_[fact]) > 3 OR ABS(zscore_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_diff_[fact])/3, ABS(zscore_pctg_diff_[fact])) *  1/num_dimensions
+				ELSE
+					GREATEST(
+						ABS(zscore_norm_diff_[fact]),
+						ABS(zscore_norm_pctg_diff_[fact]),
+						ABS(zscore_diff_[fact]/3),
+						ABS(zscore_pctg_diff_[fact])
+					) * 1/num_dimensions
+			END
+		, 2 )
+	]]></score_expression>
+
+	<dimensions>
+		<dimension type="invariant" partition_column="true">clnt_obj_id</dimension>
+		<!--dimension type="invariant" partition_column="true">db_schema</dimension-->
+		<dimension type="invariant">d_work_cntry_cd</dimension>
+		<hierarchy>
+			<dimension type="invariant" partition_column="true">yr_seq_nbr</dimension>
+			<dimension type="invariant" partition_column="true">qtr_seq_nbr</dimension>
+			<dimension type="invariant" partition_column="true">mnth_seq_nbr</dimension>
+		</hierarchy>
+	</dimensions>
+
+	<zscore_filter>(headcount &gt;= 1000 and percentage_headcount &gt;= 3) or (headcount &gt;= 100 and headcount &lt;= 1000 and percentage_headcount &gt;= 5)
+     or (headcount &gt;= 10 and headcount &lt;= 100 and num_employees &gt;= 5) or (headcount &lt; 10 and num_employees &gt;= 3)</zscore_filter>
+
+	
+	<facts>
+		<fact>
+			<!--name>overtime_earnings_per_fte</name-->
+			<!--name>earnings_per_fte</name-->
+			<name type="non-rate">overtime_earnings</name>
+			<!--name type="non-rate">total_earnings</name-->
+			<name>average_earnings</name>
+		</fact>
+	</facts>
+
+	<supportcolumns>
+		<column>environment</column>
+	    <column>num_employees</column>
+	    <column>d_job_cd</column>
+		<!--column>d_reg_temp_cd</column>
+		<column>d_flsa_stus_cd</column>
+		<column>d_gndr_cd</column>
+		<column>d_pay_rt_type_cd</column>
+		<column>d_full_tm_part_tm_cd</column-->
+		<column>d_hr_orgn_id</column>
+		<column>d_work_state_cd</column>
+		<!--column>d_work_city_cd</column-->
+		<column>d_work_loc_cd</column>
+		<column>headcount</column>
+		<column>percentage_headcount</column>
+		<column>period_cd</column>
+		<column>overtime_earnings_events</column>
+		<column>average_earnings_events</column>
+	</supportcolumns>
+
+<analysisgroups>
+		<analysisgroup>
+			<name>clnt_obj_id</name>
+			<name>yr_seq_nbr</name>
+			<name>qtr_seq_nbr</name>
+			<name>mnth_seq_nbr</name>
+		</analysisgroup>
+</analysisgroups>
+
+</insights>

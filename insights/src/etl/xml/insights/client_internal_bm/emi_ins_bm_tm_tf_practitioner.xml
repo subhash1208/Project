@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>emi_ins_intl_bm_tm_tf_practitioner</name>
+	<type>CLIENT_INTERNAL_BM</type>
+	<score_expression> <![CDATA[
+		ROUND(
+			CASE
+				WHEN ABS(zscore_norm_diff_[fact]) > 1 OR ABS(zscore_norm_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_norm_diff_[fact]) , ABS(zscore_norm_pctg_diff_[fact])) * 1/num_dimensions
+				WHEN ABS(zscore_diff_[fact]) > 3 OR ABS(zscore_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_diff_[fact])/3, ABS(zscore_pctg_diff_[fact])) * 1/num_dimensions
+				ELSE
+					GREATEST(
+						ABS(zscore_norm_diff_[fact]),
+						ABS(zscore_norm_pctg_diff_[fact]),
+						ABS(zscore_diff_[fact]/3),
+						ABS(zscore_pctg_diff_[fact])
+					) * 1/num_dimensions
+			END
+		, 2 )
+	]]></score_expression>
+
+	<dimensions>
+		<dimension type="invariant" partition_column="true">clnt_obj_id</dimension>
+		<!--dimension type="invariant" partition_column="true">db_schema</dimension-->
+		<hierarchy>
+			<dimension type="invariant">yr_seq_nbr</dimension>
+			<dimension type="invariant">qtr_seq_nbr</dimension>
+			<dimension type="invariant">mnth_seq_nbr</dimension>
+		</hierarchy>
+		<!--dimension type="invariant">wk_seq_nbr</dimension-->
+	</dimensions>
+
+	<facts>
+		<fact>
+			<name>absence_ratio</name>
+			<!--name>leave_ratio</name-->
+			<name>overtime_ratio</name>
+			<!--name type="non-rate">total_hrs</name-->
+		</fact>
+	</facts>
+
+	<supportcolumns>
+	    <column>num_employees</column>
+		<column>job_cd</column>
+		<!--column>reg_temp_cd</column>
+		<column>gndr_cd</column>
+		<column>pay_rt_type_cd</column>
+		<column>full_tm_part_tm_cd</column-->
+		<column>hr_orgn_id</column>
+		<column>percentage_headcount</column>
+		<column>work_cntry_cd</column>
+		<column>work_state_cd</column>
+		<!--column>work_city_cd</column-->
+		<column>work_loc_cd</column>
+		<column>period_cd</column>
+	</supportcolumns>
+
+</insights>

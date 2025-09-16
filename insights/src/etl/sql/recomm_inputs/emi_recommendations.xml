@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<recommender>
+     <name>emi_recommender_base_dataset</name>
+     <dimensions>
+        <dimension type="xor">hr_orgn_id</dimension>
+        <dimension type="xor">job_cd</dimension>
+        <hierarchy type='time'>
+                <dimension>yr_cd</dimension>
+                <dimension>qtr_cd</dimension>
+                <dimension>mnth_cd</dimension>
+        </hierarchy>
+        <hierarchy type='area'>
+                <dimension>iso_3_char_cntry_cd</dimension>
+                <dimension type = "xor">state_prov_cd</dimension>
+                <dimension>work_loc_cd</dimension>
+         </hierarchy>
+        <dimension>trmnt_rsn</dimension>
+        <dimension>adp_lense_cd</dimension>
+        <dimension>inds_cd</dimension>
+        <dimension>sector_cd</dimension>
+        <dimension>super_sect_cd</dimension>
+        <dimension>mngr_pers_obj_id</dimension>
+      </dimensions>
+
+      <metacolumns>
+            <meta>ins_type</meta>
+            <meta>mtrc_ky</meta>
+      </metacolumns>
+
+      <lblEncodeColumns>
+           <lblencode>hash_dimension_comb</lblencode>
+           <lblencode>usr_id</lblencode>
+      </lblEncodeColumns>
+
+      <onehotColumns>
+           <onehot>dimension_comb</onehot>
+           <onehot values="1,2,3,4,5,6,7,8">age_band_ky_</onehot>
+           <onehot values="EXEMPT,NONEXEMPT">flsa_status_</onehot>
+           <onehot values="3,4,5,6">nbr_of_diments</onehot>
+           <onehot values="Year,Quarter,Month">time_grain</onehot>
+      </onehotColumns>
+
+</recommender>

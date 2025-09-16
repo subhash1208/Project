@@ -1,0 +1,140 @@
+<cubes>
+	<cube>
+		<name>emi_cube_tm_tf_manager</name>
+
+		<dimensions>
+			<dimension mandatory="true">clnt_obj_id</dimension>
+			<dimension mandatory="true">mngr_pers_obj_id</dimension>
+			<hierarchy>
+				<dimension mandatory="true">yr_cd</dimension>
+				<dimension>qtr_cd</dimension>
+				<dimension>mnth_cd</dimension>
+			</hierarchy>
+			<dimension xor-group-name="main">clndr_wk_cd</dimension>
+			<hierarchy>
+				<dimension>work_cntry_cd</dimension>
+				<dimension xor-group-name="main">work_state_cd</dimension>
+				<dimension>work_loc_cd</dimension>
+			</hierarchy>
+
+			<dimension xor-group-name="main">job_cd</dimension>
+			<!--dimension xor-group-name="main">gndr_cd</dimension-->
+			<dimension xor-group-name="main">hr_orgn_id</dimension>
+		</dimensions>
+
+		<facts>
+
+			<fact>
+				<!-- This fact is used ONLY for the purpose of scoring, and hence an approximation is OK -->
+				<name>num_employees</name>
+				<column>num_employees</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>absence_hrs_in_secnd</name>
+				<column>absence_hrs_in_secnd</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>ot_hrs_in_secnd</name>
+				<column>ot_hrs_in_secnd</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<!--fact>
+				<name>leave_hrs_in_secnd</name>
+				<column>actl_hrs_in_secnd_nbr</column>
+				<when> clnt_cnfrm_ind = 1 AND leav_ind = 1 and actl_hrs_in_secnd_nbr IS NOT NULL </when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact-->
+
+			<fact>
+				<name>actual_hrs_in_secnd</name>
+				<column>actl_hrs_in_secnd_nbr</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<!--fact>
+				<name>absence_cost</name>
+				<column>actl_cost</column>
+				<when> clnt_cnfrm_ind = 1 AND absence_ind = 1 and actl_cost IS NOT NULL </when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>ot_cost</name>
+				<column>actl_cost</column>
+				<when> clnt_cnfrm_ind = 1 AND ot_ind = 1 and actl_cost IS NOT NULL </when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>leave_cost</name>
+				<column>actl_cost</column>
+				<when> clnt_cnfrm_ind = 1 AND leav_ind = 1 and actl_cost IS NOT NULL </when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>actual_cost</name>
+				<column>actl_cost</column>
+				<when>actl_cost IS NOT NULL </when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact-->
+		</facts>
+
+		<postprocess>
+			<!-- Composite Facts -->
+			<column>
+				<name>total_hrs</name>
+				<expr>actual_hrs_in_secnd / 3600</expr>
+			</column>
+			<column>
+				<name>absence_hrs</name>
+				<expr>absence_hrs_in_secnd / 3600</expr>
+			</column>
+			<!--column>
+				<name>leave_hrs</name>
+				<expr>leave_hrs_in_secnd / 3600</expr>
+			</column-->
+			<column>
+				<name>overtime_hrs</name>
+				<expr>ot_hrs_in_secnd / 3600</expr>
+			</column>
+			<column>
+				<name>absence_ratio</name>
+				<expr>CASE WHEN total_hrs = 0 THEN 0 ELSE round(100 * absence_hrs/total_hrs, 2) END</expr>
+			</column>
+			<!--column>
+				<name>leave_ratio</name>
+				<expr>CASE WHEN total_hrs = 0 THEN 0 ELSE round(100 * leave_hrs/total_hrs, 2) END</expr>
+			</column-->
+			<column>
+				<name>overtime_ratio</name>
+				<expr>CASE WHEN total_hrs = 0 THEN 0 ELSE round(100 * overtime_hrs/total_hrs, 2) END</expr>
+			</column>
+		</postprocess>
+
+	</cube>
+
+</cubes>

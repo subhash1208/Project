@@ -1,0 +1,79 @@
+<cubes>
+	<cube>
+		<name>emi_cube_pr_pef_manager</name>
+
+		<dimensions>
+			<dimension mandatory="true">clnt_obj_id</dimension>
+			<dimension mandatory="true">mngr_pers_obj_id</dimension>
+			<hierarchy>
+				<dimension mandatory="true">yr_cd</dimension>
+				<dimension>qtr_cd</dimension>
+				<dimension>mnth_cd</dimension>
+			</hierarchy>
+			<!-- <dimension>wk_cd</dimension> -->
+			<!-- Are weekly payroll insights needed for Managers? -->
+			<hierarchy>
+				<dimension>d_work_cntry_cd</dimension>
+				<dimension xor-group-name="main">d_work_state_cd</dimension>
+				<dimension>d_work_loc_cd</dimension>
+			</hierarchy>
+			<dimension xor-group-name="main">d_job_cd</dimension>
+			<!--dimension xor-group-name="main">d_gndr_cd</dimension-->
+			<dimension xor-group-name="main">d_hr_orgn_id</dimension>
+		</dimensions>
+
+		<addons>
+			<supportcolumns>
+				<column>d_ot_ind</column>
+			</supportcolumns>
+		</addons>
+
+		<facts>
+			<fact>
+				<name>count_distinct_person</name>
+				<column>pers_obj_id</column>
+				<aggregation>
+					<type>COUNT_DISTINCT</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>overtime_earnings</name>
+				<column>earn_amt</column>
+				<when>d_ot_ind = 1</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>total_earnings</name>
+				<column>earn_amt</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<!--fact>
+				<name>total_hours</name>
+				<column>hrs_nbr</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact-->
+
+		</facts>
+
+	    <postprocess>
+            <!-- This fact is used ONLY for the purpose of scoring, and hence an approximation is OK.
+            But since we are anyway computing the exact count distinct in this case, we just piggy back on it-->
+            <column>
+                <name>num_employees</name>
+                <expr>count_distinct_person</expr>
+            </column>
+        </postprocess>
+
+
+	</cube>
+
+</cubes>

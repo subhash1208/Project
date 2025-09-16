@@ -1,0 +1,11 @@
+{
+    "_description": "recommendation uploads",
+    "application-name": "insights",
+    "notebook-file": "emi_recommendation_uploads_db.py",
+    "notebook-param": [             
+      {
+          "key": "green-main-db",
+          "value": "{{__GREEN_MAIN_DB__}}"
+      }
+   ] 
+}

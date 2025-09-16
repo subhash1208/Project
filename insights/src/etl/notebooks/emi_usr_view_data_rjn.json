@@ -1,0 +1,24 @@
+{
+    "job_name": "emi_usr_view_data_emi_user_click_data_load_bkgww",
+    "job_tags": {
+        "Application": "datacloud-data_science-dwh",
+        "BusinessUnit": "datacloud",
+        "DatabricksGroup": "datacloud-data_science-dwh",
+        "OwnerDetails": "DS.ARCH@ADP.COM",
+        "ResourceOwner1": "Datacloud DS Architecture",
+        "ResourceOwner2": "ComponentTeam",
+        "Function": "dwh",
+        "Project": "insights"
+    },
+    "job_parameters": [
+        {
+            "key": "blue_main_s3_bucket",
+            "value": "{{__BLUE_MAIN_S3_BUCKET__}}"
+        },
+        {
+            "key": "__BLUE_MAIN_DB__",
+            "value": "{{__BLUE_MAIN_DB__}}"
+        }
+    ],
+    "is_sql": true
+}

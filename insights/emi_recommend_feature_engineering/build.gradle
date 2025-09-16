@@ -1,0 +1,107 @@
+group = 'com.adp.datacloud.ds'
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'scala'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+def dsGenericComponentsVersion = '22.06.6'
+def sparkVersion = "3.1.2"
+def word2VecMojoVersion = '7.0'
+def scalaVersion = "2.12"
+
+repositories {
+    maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote' }
+    maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local' }
+}
+
+eclipse {
+    project {
+        natures 'org.springsource.ide.eclipse.gradle.core.nature'
+    }
+}
+
+configurations {
+    compile.exclude group: "org.jboss.netty", module: "netty"  // Hack to avoid trap because of netty version
+}
+
+dependencies {
+    
+    implementation("org.apache.commons:commons-io:1.3.2")
+    
+    implementation("org.apache.logging.log4j:log4j-api:2.17.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.17.0")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.17.0")
+    implementation("org.apache.logging.log4j:log4j-jcl:2.17.0")
+    implementation("com.lmax:disruptor:3.1.0")
+    implementation("javax.inject:javax.inject:1")
+    implementation("com.github.scopt:scopt_${scalaVersion}:3.5.0"){ exclude group: 'org.scala-lang'}
+    
+    implementation("org.apache.zookeeper:zookeeper:3.4.5") {force = true}
+
+    implementation("org.scala-lang:scala-library:2.12.16")
+    implementation("org.scalaz:scalaz-core_${scalaVersion}:7.2.34")
+    implementation("org.apache.spark:spark-core_"+ scalaVersion + ":" + sparkVersion)
+    implementation("org.apache.spark:spark-sql_"+ scalaVersion + ":" + sparkVersion)
+    implementation("org.apache.spark:spark-hive_" + scalaVersion + ":" + sparkVersion)
+    implementation("org.apache.spark:spark-mllib_"+ scalaVersion + ":" + sparkVersion)
+    implementation("com.oracle:ojdbc8:12.2.0.1")
+    implementation("ai.h2o:h2o-genmodel:3.14.0.1")
+    implementation("com.adp.datacloud.ds:spark-adp-commons:" + dsGenericComponentsVersion)
+    {
+        exclude group: 'org.apache.avro', module: 'avro-mapred'
+        
+    }
+    implementation("com.adp.datacloud.ds:spark-feature-engineering:" + dsGenericComponentsVersion)
+   {
+        exclude group: 'org.apache.avro', module: 'avro-mapred'
+        
+    }
+    implementation('com.adp.datacloud.ds:adp-crypt-functions:2.3')
+    {
+        exclude group: 'org.apache.avro', module: 'avro-mapred'
+       
+    }
+
+}
+
+jar {
+    from {
+        configurations.compileClasspath.filter({
+            it.name =~ /spark-adp-commons.*\.jar/ || // left for backward compatibility of gradle, and better readability
+            it.name =~ /scopt.*\.jar/ || 
+            it.name =~ /adp-crypt-functions.*\.jar/
+        }).collect {
+            // For the sake of ease of use, we will work around jarsigning issues while creating fatjars
+            // Certain oracle jars are signed jars, and we will make them unsigned while embedding
+            zipTree(it).matching{ exclude{it.path.contains('META-INF')} }
+        } + 
+        configurations.compileClasspath.filter({
+            it.path =~ /.*main/
+            // Unlike earlier versions of gradle, project dependencies are not showing up as a jar file in classpath
+            // Instead they show up as sourceset paths. Examples below...
+            // /Users/oletiman/iSource/cpde-projects/ds-generic-components/spark-adp-commons/build/classes/java/main
+            // /Users/oletiman/iSource/cpde-projects/ds-generic-components/spark-adp-commons/build/classes/scala/main
+        }).collect {
+            fileTree(it.path)
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local/") {
+                authentication(userName: "${System.env.ARTIFACTORY_CREDENTIALS_USR}", password: "${System.env.ARTIFACTORY_CREDENTIALS_PSW}")
+            }
+            snapshotRepository(url: 'https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-snapshots-local/') {
+                authentication(userName: "${System.env.ARTIFACTORY_CREDENTIALS_USR}", password: "${System.env.ARTIFACTORY_CREDENTIALS_PSW}")
+            }
+        }
+    }
+}
+
+// compileScala.dependsOn.remove 'compileJava'

@@ -1,0 +1,110 @@
+{
+      "name": "Load emi_ins_hr_waf_practitioner",
+      "tags": {
+        "cost-center": "datacloud",
+        "team": "DMT-Benefits-Time-Insights-HR"
+      },
+      "tasks": [
+        {
+            "task_key": "emi_ins_hr_waf_practitioner",
+            "description": "Submits to extract data",
+            "job_cluster_key": "dwh_job_cluster",
+            "notebook_task": {
+                "notebook_path": "{{PROJECT_ROOT}}/src/etl/extract/OneData_Extract/transform/dwh_views_creation",
+                "source": "WORKSPACE",
+                "base_parameters": {
+                    "env": "fit",
+                    "__ADPI_VANTAGE_DB__" : "adpa_dwh_vantage_fit1",
+                    "__ADPI_WFN_DB__" : "adpa_dwh_wfn_fit1",
+                    "__ADPI_WFNPI_DB__" : "adpa_dwh_wfnpi_fit1",
+                    "__ADPI_LIFION_DB__" : "adpa_dwh_lifion_fit1",
+                    "__ADPI_EV_DB__": "adpa_dwh_ev_fit1",
+                    "__BLUE_MAIN_DB__": "datacloud_nonprod_dit_blue_main",
+                    "__GREEN_BASE_DB__": "datacloud_nonprod_dit_base",
+                    "__BLUE_RAW_DB__": "datacloud_nonprod_dit_blue_raw",
+                    "__GREEN_RAW_DB__": "datacloud_nonprod_dit_raw",
+                    "__RO_GREEN_RAW_DB__": "datacloud_nonprod_dit_raw",
+                    "__RO_BLUE_LANDING_BASE_DB__":"datacloud_nonprod_dit_blue_landing_base",
+                    "__RO_BLUE_LANDING_MAIN_DB__":"datacloud_nonprod_dit_blue_landing_main",
+                    "__RO_BLUE_LANDING_DB__":"datacloud_nonprod_dit_blue_landing",
+                    "__SSOT_BLUE_ETIME_DB__": "ssot_blue_etime_fit",
+                    "yyyymmww":"",
+                    "yyyymm":"",
+                    "restart_table_number":"1",
+                    "connection_details_file" : "File:/Workspace{{PROJECT_ROOT}}/src/etl/extract/SDGP_Extract/connection_details.csv"
+                }
+            },
+            "libraries": [
+                {
+                    "pypi": {
+                        "package": "rime-sdk==0.20.21",
+                        "repo": "https://artifactory.us.caas.oneadp.com/artifactory/api/pypi/pypi/simple"
+                    }
+                }
+            ],
+            "timeout_seconds": 0,
+            "max_retries": 0,
+            "min_retry_interval_millis": 2000,
+            "retry_on_timeout": false
+        }
+    ],
+    "job_clusters": [
+        {
+          "job_cluster_key": "dwh_job_cluster",
+          "new_cluster": {
+            "spark_version": "13.3.x-cpu-ml-scala2.12",
+            "node_type_id": "m5d.4xlarge",
+            "spark_conf": {
+              "spark.speculation": true,
+              "spark.databricks.hive.metastore.glueCatalog.enabled": true,
+              "spark.hadoop.hive.metastore.glue.catalogid": "591853665740",
+              "spark.hadoop.fs.s3a.acl.default": "BucketOwnerFullControl",
+              "spark.hadoop.fs.s3n.impl": "com.databricks.s3a.S3AFileSystem",
+              "spark.hadoop.fs.s3a.canned.acl": "BucketOwnerFullControl",
+              "spark.databricks.cluster.profile": "serverless",
+              "spark.hadoop.fs.s3a.impl": "com.databricks.s3a.S3AFileSystem",
+              "spark.databricks.delta.catalog.update.enabled": "false",
+              "spark.cleaner.periodicGC.interval": "10min"
+            },
+            "aws_attributes": {
+              "availability": "SPOT_WITH_FALLBACK",
+              "zone_id": "auto",
+              "instance_profile_arn":"arn:aws:iam::708035784431:instance-profile/databricks-dataplatform-dev-roletf",
+              "ebs_volume_type": "GENERAL_PURPOSE_SSD",
+              "ebs_volume_count":1,
+              "ebs_volume_size": 400
+            },
+            "autoscale": {
+              "min_workers": 1,
+              "max_workers": 20
+            }
+          }
+        }
+      ],
+    "email_notifications": {
+        "on_start": [
+            "vyaghri.satya.srinivasu.borusu@ADP.com"
+        ],
+        "on_success": [
+            "vyaghri.satya.srinivasu.borusu@ADP.com"
+        ],
+        "on_failure": [
+            "vyaghri.satya.srinivasu.borusuADP.com"
+        ],
+        "no_alert_for_skipped_runs": false
+    },
+    "timeout_seconds": 86400,
+    "max_concurrent_runs": 1,
+    "schedule": {
+      "quartz_cron_expression": "0 0 14 ? * Wed",
+        "timezone_id": "America/New_York",
+        "pause_status": "PAUSED"
+      },
+    "format": "MULTI_TASK",
+    "access_control_list": [
+        {
+            "user_name": "vyaghri.satya.srinivasu.borusu@ADP.com",
+            "permission_level": "CAN_MANAGE"
+        }
+    ]
+}

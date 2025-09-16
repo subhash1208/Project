@@ -1,0 +1,1 @@
+gradle -PsystemProp.sonar.login=afcc297b4c4c2133adf07e87de083e4daf7f3a3a sonarqube --info  > debug.log

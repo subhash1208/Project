@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cubes>
+    <cube>
+        <name>benchmark_cube_annual</name>
+
+        <filters>
+            <filter>work_state_ != 'PR'</filter>
+            <filter>annual_base_ &gt; 0</filter>
+        </filters>
+
+        <dimensions>
+            <hierarchy>
+                <dimension xor-group-name="location">region</dimension>
+                <dimension>subregion</dimension>
+                <dimension>work_state_</dimension>
+            </hierarchy>
+
+            <dimension xor-group-name="location range_bands naics_valid_groups">csa_code</dimension>
+            <dimension xor-group-name="location range_bands naics_valid_groups">msa_code</dimension>
+
+            <!-- <dimension xor-group-name="industry naics_valid_groups">naics_2017</dimension>
+            <dimension xor-group-name="industry">ind_combo_cd</dimension>
+            <dimension xor-group-name="industry">ind_subsector_cd</dimension>
+            <dimension xor-group-name="industry">ind_sector_cd</dimension>
+            <dimension xor-group-name="industry">ind_supersector_cd</dimension>
+            <dimension xor-group-name="industry">ind_crosssector_cd</dimension>  -->
+
+            <hierarchy>
+                <dimension xor-group-name="job">onet_cd</dimension>
+                <dimension>job_level</dimension>
+            </hierarchy>
+
+            <hierarchy>
+                <dimension xor-group-name="job">adp_lens_cd</dimension>
+                <dimension>job_level</dimension>
+            </hierarchy>
+
+            <dimension xor-group-name="range_bands naics_valid_groups">headcount_band_ky</dimension>
+            <dimension xor-group-name="range_bands naics_valid_groups">revenue_band_ky</dimension>
+            <!--  
+
+            <dimension xor-group-name="rate_tnur_xor">rate_type</dimension>
+            <dimension xor-group-name="rate_tnur_xor">tenure_band_ky_</dimension>
+            <dimension>full_time_part_time</dimension>
+            <dimension>ownership_type</dimension>
+             -->
+
+        </dimensions>
+
+        <addons>
+            <supportcolumns>
+                <column>months_cnt</column>
+            </supportcolumns>
+        </addons>
+
+        <facts>
+
+            <fact>
+                <name>base_avg</name>
+                <column>annual_base_</column>
+                <when>annual_base_ &gt; 0 </when>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>annual_base_pct</name>
+                <column>annual_base_</column>
+                <when>annual_base_ &gt; 0 </when>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                        <argument>5000</argument>
+                        <argument>false</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>base_empl_cnt</name>
+                <column>annual_base_</column>
+                <when>annual_base_ &gt; 0 </when>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>base_clnt_cnt</name>
+                <column>ooid</column>
+                <when>annual_base_ &gt; 0 </when>
+                <aggregation>
+                    <type>APPROX_COUNT_DISTINCT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>bonus_avg</name>
+                <column>bonus_</column>
+                <when>bonus_ &gt; 0 and months_cnt=12</when>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>bonus_pctl</name>
+                <column>bonus_</column>
+                <when>bonus_ &gt; 0 and months_cnt=12</when>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                        <argument>5000</argument>
+                        <argument>false</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>bonus_empl_cnt</name>
+                <column>bonus_</column>
+                <when>bonus_ &gt; 0 and months_cnt=12</when>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>bonus_clnt_cnt</name>
+                <when>bonus_ &gt; 0 and months_cnt=12</when>
+                <column>ooid</column>
+                <aggregation>
+                    <type>APPROX_COUNT_DISTINCT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ot_avg</name>
+                <column>valid_overtime_pay</column>
+                <when>valid_overtime_pay &gt; 0</when>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ot_pct</name>
+                <column>valid_overtime_pay</column>
+                <when>valid_overtime_pay &gt; 0</when>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                        <argument>5000</argument>
+                        <argument>false</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>ot_empl_cnt</name>
+                <column>valid_overtime_pay</column>
+                <when>valid_overtime_pay &gt; 0</when>
+                <aggregation>
+                    <type>COUNT</type>
+                </aggregation>
+            </fact>
+
+
+            <fact>
+                <name>ot_clnt_cnt</name>
+                <column>ooid</column>
+                <when>valid_overtime_pay &gt; 0</when>
+                <aggregation>
+                    <type>APPROX_COUNT_DISTINCT</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>br_avg</name>
+                <column>bonus_ratio</column>
+                <when>bonus_ratio &gt; 0  and months_cnt=12</when>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+
+            <fact>
+                <name>br_pct</name>
+                <column>bonus_ratio</column>
+                <when>bonus_ratio &gt; 0 and months_cnt=12</when>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                        <argument>5000</argument>
+                        <argument>false</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>or_avg</name>
+                <column>valid_ot_ratio</column>
+                <when>valid_ot_ratio &gt; 0</when>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+
+            <fact>
+                <name>or_pct</name>
+                <column>valid_ot_ratio</column>
+                <when>valid_ot_ratio &gt; 0</when>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                        <argument>5000</argument>
+                        <argument>false</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>total_cash_avg</name>
+                <column>total_cash</column>
+                <when>total_cash &gt; 0 </when>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>total_cash_pct</name>
+                <column>total_cash</column>
+                <when>total_cash &gt; 0 </when>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                        <argument>5000</argument>
+                        <argument>false</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>base_bonus_avg</name>
+                <column>base_plus_bonus</column>
+                <when>base_plus_bonus &gt; 0 and months_cnt=12</when>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>base_bonus_pct</name>
+                <column>base_plus_bonus</column>
+                <when>base_plus_bonus &gt; 0 and months_cnt=12</when>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                        <argument>5000</argument>
+                        <argument>false</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>hrly_rt_avg</name>
+                <column>hrly_rt</column>
+                <when>hrly_rt &gt; 0 </when>
+                <aggregation>
+                    <type>AVG</type>
+                </aggregation>
+            </fact>
+
+            <fact>
+                <name>hrly_rt_pct</name>
+                <column>hrly_rt</column>
+                <when>hrly_rt &gt; 0 </when>
+                <aggregation>
+                    <type>HIVE_PERCENTILE</type>
+                    <arguments>
+                        <argument>10,25,50,75,90</argument>
+                        <argument>5000</argument>
+                        <argument>false</argument>
+                    </arguments>
+                </aggregation>
+            </fact>
+        </facts>
+
+        <postprocess>
+
+            <column>
+                <name>annual_base_ng</name>
+                <expr>abs(base_avg/annual_base_pct_50th_percentile-1)</expr>
+            </column>
+
+            <column>
+                <name>bonus_ng</name>
+                <expr>abs(bonus_avg/bonus_pctl_50th_percentile-1)</expr>
+            </column>
+
+            <column>
+                <name>ot_ng</name>
+                <expr>abs(ot_avg/ot_pct_50th_percentile-1)</expr>
+            </column>
+
+            <column>
+                <name>ot_ratio_ng</name>
+                <expr>abs(or_avg/or_pct_50th_percentile-1)</expr>
+            </column>
+
+            <column>
+                <name>bonus_ratio_ng</name>
+                <expr>abs(br_avg/br_pct_50th_percentile-1)</expr>
+            </column>
+
+            <column>
+                <name>total_cash_ng</name>
+                <expr>abs(total_cash_avg/total_cash_pct_50th_percentile-1)</expr>
+            </column>
+
+            <column>
+                <name>base_plus_bonus_ng</name>
+                <expr>abs(base_bonus_avg/base_bonus_pct_50th_percentile-1)</expr>
+            </column>
+            <column>
+                <name>hrly_rt_ng</name>
+                <expr>abs(hrly_rt_avg/hrly_rt_pct_50th_percentile-1)</expr>
+            </column>
+
+            <filters>
+                <filter>base_empl_cnt>=10 and base_clnt_cnt>=5</filter>
+            </filters>
+        </postprocess>
+    </cube>
+</cubes>

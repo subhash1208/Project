@@ -1,0 +1,20 @@
+{
+    "job_name": "move_files_to_s3",
+    "job_tags": {
+        "Application": "datacloud-data_science-dwh",
+        "BusinessUnit": "datacloud",
+        "DatabricksGroup": "datacloud-data_science-dwh",
+        "OwnerDetails": "DS.ARCH@ADP.COM",
+        "ResourceOwner1": "Datacloud DS Architecture",
+        "ResourceOwner2": "ComponentTeam",
+        "Function": "dwh",
+        "Project": "insights"
+    },
+    "job_parameters": [
+        {
+            "key": "__CODESTORE_BUCKET__",
+            "value": "{{__CODESTORE_BUCKET__}}"
+        }
+    ],
+    "is_sql": true
+}

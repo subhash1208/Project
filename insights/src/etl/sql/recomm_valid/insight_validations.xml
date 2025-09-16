@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables>
+    <table dbname="{{__GREEN_MAIN_DB__}}" tablename="t_fact_insights" >
+        <uniquecolumns>environment,ins_hash_val</uniquecolumns>
+        <excludecolumns>qtr_cd</excludecolumns>
+    </table>
+    <table dbname="{{__GREEN_MAIN_DB__}}" tablename="validate_recommendations">
+        <column name="validation" valid_values="'true'" />
+    </table>
+</tables>

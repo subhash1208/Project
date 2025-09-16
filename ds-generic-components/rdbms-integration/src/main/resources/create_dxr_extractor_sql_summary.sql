@@ -1,0 +1,26 @@
+CREATE TABLE dxr_extractor_sql_summary
+  (
+     sql_name                  VARCHAR2(255),
+     application_id            VARCHAR2(255),
+     target_count              NUMBER(19) NOT NULL,
+     row_count                 NUMBER(19),
+     connections_success_count NUMBER(19),
+     connections_error_count   NUMBER(19),
+     total_sec_db_time         NUMBER(19, 4),
+     avg_sec                   NUMBER(19, 4),
+     max_exec_sec              NUMBER(19, 4),
+     pctl_80th_sec             NUMBER(19, 4),
+     pctl_90th_sec             NUMBER(19, 4),
+     pctl_95th_sec             NUMBER(19, 4),
+     pctl_99th_sec             NUMBER(19, 4),
+     avg_row_count             NUMBER(19),
+     max_row_count             NUMBER(10),
+     pctl_80th_row_count       NUMBER(19),
+     pctl_90th_row_count       NUMBER(19),
+     pctl_95th_row_count       NUMBER(19),
+     pctl_99th_row_count       NUMBER(19),
+     is_data_corrupt           NUMBER(1) NOT NULL,
+     is_failed_write           NUMBER(1) NOT NULL,
+     is_failure                NUMBER(1) NOT NULL,
+     log_date                  DATE DEFAULT SYSDATE
+  ) 

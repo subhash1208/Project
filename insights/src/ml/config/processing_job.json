@@ -1,0 +1,67 @@
+{
+    "ProcessingInputs": [
+        {
+            "InputName": "input-1",
+            "S3Input": {
+                "S3Uri": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset/",
+                "LocalPath": "/opt/ml/processing/input",
+                "S3DataType": "S3Prefix",
+                "S3InputMode": "File",
+                "S3DataDistributionType": "FullyReplicated",
+                "S3CompressionType": "None"
+            }
+        }
+    ],
+    "ProcessingOutputConfig": {
+        "Outputs": [
+            {
+                "OutputName": "train",
+                "S3Output": {
+                    "S3Uri": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset_output/processing/train/",
+                    "LocalPath": "/opt/ml/processing/output/train",
+                    "S3UploadMode": "EndOfJob"
+                }
+            },
+            {
+                "OutputName": "valid",
+                "S3Output": {
+                    "S3Uri": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset_output/processing/valid/",
+                    "LocalPath": "/opt/ml/processing/output/valid",
+                    "S3UploadMode": "EndOfJob"
+                }
+            },
+             {
+                "OutputName": "test",
+                "S3Output": {
+                    "S3Uri": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset_output/processing/test/",
+                    "LocalPath": "/opt/ml/processing/output/test",
+                    "S3UploadMode": "EndOfJob"
+                }
+            },
+             {
+                "OutputName": "full",
+                "S3Output": {
+                    "S3Uri": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset_output/processing/full/",
+                    "LocalPath": "/opt/ml/processing/output/full",
+                    "S3UploadMode": "EndOfJob"
+                }
+            }
+        ]
+    },
+    "JobNameSuffix": "proc",
+    "ProcessingResources": {
+        "ClusterConfig": {
+            "InstanceCount": 1,
+            "InstanceType": "ml.m5.4xlarge",
+            "VolumeSizeInGB": 100
+        }
+    },
+    "StoppingCondition": {
+        "MaxRuntimeInSeconds": 3600
+    },
+    "AppSpecification": {
+        "ContainerEntrypoint": [
+            "python3", "/opt/ml/code/preprocess.py"
+        ]
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "spark-config": {
+        "driver-cores": 4,
+        "driver-memory": 8,
+        "num-shuffle-partitions": 200,
+        "conf": {
+            "spark.sql.analyzer.failAmbiguousSelfJoin": "false",
+            "spark.sql.storeAssignmentPolicy": "legacy",
+            "spark.sql.legacy.timeParserPolicy": "legacy"
+          }
+    }
+}

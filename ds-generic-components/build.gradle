@@ -1,0 +1,167 @@
+import groovy.xml.*
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
+// Declare the dependencies needed for the rest of this script to run
+// For eg, plugins etc..
+buildscript {
+	repositories {
+		// mavenLocal()
+		// Piggybacking on an existing mirror of Maven central in artifactory
+		maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote' }
+	}
+}
+
+plugins {
+	id 'cz.alenkacz.gradle.scalafmt' version '1.14.0' apply false
+	id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
+	id "com.dorongold.task-tree" version "2.1.0"
+  	id 'org.sonarqube' version '3.3'
+}
+
+allprojects {
+
+	group = 'com.adp.datacloud.ds'
+	repositories {
+		// mavenCentral()
+		maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote' }
+		
+		// Oracle drivers were published in this repo (among other artifacts)
+		maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local' }
+	}
+
+	apply plugin: 'idea'
+	apply plugin: 'eclipse'
+	apply plugin: 'cz.alenkacz.gradle.scalafmt'
+
+}
+
+subprojects {
+
+	apply plugin: 'base' // For clean task
+	apply plugin: 'scala'
+	apply plugin: 'maven-publish'
+
+	ext {
+		awsSdkVersion = "1.12.153"
+		sparkVersion = "3.2.1"
+		scalaVersion = "2.12"
+		mongodbDriverVersion = "2.4.2"
+		orcleWalletJarsVersion = "19.7.0.0"
+	}
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	eclipse {
+		project { natures 'org.eclipse.buildship.core.gradleprojectnature' }
+		classpath {
+			downloadJavadoc = true
+			downloadSources = true
+		}
+	}
+
+	idea {
+		module {
+			downloadJavadoc = true
+			downloadSources = true
+		}
+	}
+
+	jar {
+		manifest {
+			attributes 'Implementation-Title': 'ds-generic-components',
+			'Implementation-Version': version ?: '0.0.0'
+		}
+	}
+
+	sourceSets {
+		// Make the compileOnly dependencies available when compiling/running tests
+		test.compileClasspath += configurations.compileOnly
+		test.runtimeClasspath += configurations.compileOnly
+	}
+
+	dependencies {
+		compileOnly("org.apache.spark:spark-hive_${scalaVersion}:${sparkVersion}")
+		implementation("com.github.scopt:scopt_${scalaVersion}:3.5.0"){ exclude group: 'org.scala-lang'}
+
+		// delta core -- this is managed in databricks so don't package it inside jars
+		compileOnly("io.delta:delta-core_${scalaVersion}:1.1.0")
+		// aws-java-sdks
+		compileOnly("com.amazonaws:aws-java-sdk-s3:${awsSdkVersion}")
+		compileOnly("com.amazonaws:aws-java-sdk-dynamodb:${awsSdkVersion}")        
+		compileOnly("com.amazonaws:aws-java-sdk-ssm:${awsSdkVersion}")
+		compileOnly("com.amazonaws:aws-java-sdk-secretsmanager:${awsSdkVersion}")
+		compileOnly("com.amazonaws:aws-java-sdk-comprehend:${awsSdkVersion}")
+		testImplementation("com.amazonaws:aws-java-sdk-sts:${awsSdkVersion}")
+
+		testImplementation("org.scalatest:scalatest_${scalaVersion}:3.2.0")
+		testImplementation("org.scalatestplus:scalatestplus-junit_${scalaVersion}:1.0.0-M2")
+		testImplementation("com.github.pathikrit:better-files_${scalaVersion}:3.9.1")
+		testImplementation("org.apache.hadoop:hadoop-aws:3.2.1") {
+			exclude group: 'com.amazonaws', module: 'aws-java-sdk-bundle'
+			exclude group: 'org.xerial.snappy', module: 'snappy-java'
+			exclude group: 'com.amazonaws', module: 'aws-java-sdk'
+			exclude group: 'org.apache.avro', module: 'avro'
+			}
+		testImplementation("org.mockito:mockito-scala_${scalaVersion}:1.16.46")
+	}
+
+	task allDeps(type: DependencyReportTask) {}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				artifact source: jar
+			}
+		}
+		repositories {
+			maven {
+				def releasesRepoUrl = "https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local/"
+				def snapshotsRepoUrl = "https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-snapshots-local/"
+				url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+				credentials {
+					username "${System.env.ARTIFACTORY_CREDENTIALS_USR}"
+					password "${System.env.ARTIFACTORY_CREDENTIALS_PSW}"
+				}
+			}
+		}
+	}	
+
+	test {
+		timeout = Duration.ofMinutes(40)
+		// https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.Test.html
+		ignoreFailures = true
+		testLogging.exceptionFormat(TestExceptionFormat.FULL)
+		def osName = System.getProperty("os.name").toLowerCase()
+		if (osName.indexOf("win") >= 0 || osName.indexOf("mac") >= 0) {
+			// if running locally i.e. on win/mac don't parallelize
+			maxParallelForks = 1
+		} else  {
+			// else on jenkins i.e. linux then parallelize
+			maxParallelForks = Runtime.runtime.availableProcessors()
+		}
+		println "maxParallelForks: ${maxParallelForks}"
+		testLogging {
+			// https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLoggingContainer.html
+			events "passed", "skipped", "failed", "standardOut"
+		}
+	}	
+}
+
+configure(subprojects.findAll {it.name != 'spark-adp-commons'}) {
+	dependencies {
+		implementation project(':spark-adp-commons')
+		testImplementation(project(':spark-adp-commons').sourceSets.getByName("test").output)
+	}
+	jar {
+		dependsOn project(':spark-adp-commons').jar
+		from {
+			configurations.runtimeClasspath.filter({
+				it.name =~ /spark-adp-commons.*\.jar/ || 
+				it.name =~ /scopt.*\.jar/
+			}).collect {
+				zipTree(it)
+			}
+		}
+	}
+}

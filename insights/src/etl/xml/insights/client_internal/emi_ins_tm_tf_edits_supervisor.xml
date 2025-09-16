@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>emi_ins_tm_tf_edits_supervisor</name>
+	<type>CLIENT_INTERNAL</type>
+	<score_expression> <![CDATA[
+		ROUND(
+			CASE
+			    WHEN ABS(zscore_norm_diff_[fact]) IS NULL AND ABS(zscore_norm_pctg_diff_[fact]) IS NULL AND ABS(zscore_diff_[fact]) IS NULL AND ABS(zscore_pctg_diff_[fact]) IS NULL
+				THEN (CASE WHEN (percent_rank_[fact] < 50) THEN (100 - percent_rank_[fact])/100 ELSE (percent_rank_[fact]/100) END) * (1/(1 + percentage_headcount)) * 1/num_dimensions
+				WHEN ABS(zscore_norm_diff_[fact]) > 1 OR ABS(zscore_norm_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_norm_diff_[fact]) , ABS(zscore_norm_pctg_diff_[fact])) * 1/(1+abs(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+				WHEN ABS(zscore_diff_[fact]) > 3 OR ABS(zscore_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_diff_[fact])/3, ABS(zscore_pctg_diff_[fact])) *  1/(1+abs(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+				ELSE
+					GREATEST(
+						ABS(zscore_norm_diff_[fact]),
+						ABS(zscore_norm_pctg_diff_[fact]),
+						ABS(zscore_diff_[fact]/3),
+						ABS(zscore_pctg_diff_[fact])
+					) * 1/(1+abs(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+			END
+		, 2 )
+	]]></score_expression>
+
+	<dimensions>
+		<dimension type="invariant" partition_column="true">clnt_obj_id</dimension>
+		<!--dimension type="invariant" partition_column="true">db_schema</dimension-->
+		<dimension percentile_rank="true" type="nullvariant">job_cd</dimension>
+		<dimension percentile_rank="true" type="nullvariant">hr_orgn_id</dimension>
+		<!--dimension type="variant">gndr_cd</dimension-->
+		<!--This dimension will be used for WFN EZLM Time metrics headline-->
+		<dimension percentile_rank_partition="true" type="invariant">supvr_pers_obj_id</dimension>
+		<hierarchy percentile_rank_partition="true">
+			<dimension type="ephemeral" differences="1" partition_column="true">yr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,4">qtr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,12">mnth_seq_nbr</dimension>
+		</hierarchy>
+		<hierarchy percentile_rank="true">
+			<dimension type="nullvariant">work_cntry_cd</dimension>
+			<dimension type="nullvariant">work_state_cd</dimension>
+			<!--dimension type="nullvariant">work_city_cd</dimension-->
+			<dimension type="nullvariant">work_loc_cd</dimension>
+		</hierarchy>
+		<!--dimension type="ephemeral" differences="1">wk_seq_nbr</dimension-->
+	</dimensions>
+
+	<facts>
+		<fact>
+			<name>edits_count</name>
+		</fact>
+	</facts>
+
+	<supportcolumns>
+	    <column>num_employees</column>
+		<column>percentage_headcount</column>
+		<column>period_cd</column>
+	</supportcolumns>
+
+</insights>

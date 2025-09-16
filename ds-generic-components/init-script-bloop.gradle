@@ -1,0 +1,15 @@
+
+initscript {
+  repositories{
+    maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote' }
+    mavenCentral()
+  }
+  dependencies {
+    // https://mvnrepository.com/artifact/ch.epfl.scala/gradle-bloop
+    classpath 'ch.epfl.scala:gradle-bloop_2.12:1.4.12'
+  }
+}
+allprojects {
+  apply plugin: bloop.integrations.gradle.BloopPlugin
+}
+    

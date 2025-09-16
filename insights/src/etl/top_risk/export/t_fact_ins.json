@@ -1,0 +1,7 @@
+{
+    "dxr-product-name": "{{environment}}_STAR_SCHEMA",
+    "hive-table": "${hiveconf:__GREEN_MAIN_DB__}.t_fact_ins_risk",
+    "target-rdbms-table": "t_fact_ins",
+    "pre-sql-content": "top_risk_pre_export.sql",
+    "plsql-timeout": 5000
+}

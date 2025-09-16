@@ -1,0 +1,3 @@
+dependencies {
+    testImplementation('com.adp.datacloud.ds:adp-crypt-functions:1.1'){ transitive = false }
+}// Nothing additional needed

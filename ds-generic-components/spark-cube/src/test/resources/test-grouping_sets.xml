@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cubes>
+	<cube>
+		<name>groupingsets</name>
+		
+		<groupingsets>
+			<groupingset>clnt_obj_id</groupingset>
+			<groupingset>d_pay_rt_type_cd,d_full_tm_part_tm_cd</groupingset>
+			<groupingset>d_job_cd</groupingset>
+			<groupingset>d_job_cd,d_reg_temp_dsc</groupingset>
+			<groupingset>clnt_obj_id,d_reg_temp_dsc</groupingset>
+		</groupingsets>
+		
+		<!--
+		<dimensions>
+			<dimension>d_full_tm_part_tm_cd</dimension>
+			<dimension>d_pay_rt_type_cd</dimension>
+			<dimension>d_job_cd</dimension>
+			<dimension>d_reg_temp_dsc</dimension>
+		</dimensions>  -->
+		
+		<addons>
+			<supportcolumns>
+				<column>f_work_asgnmt_stus_cd</column>
+			</supportcolumns>
+		</addons>
+
+		<facts>
+
+			<fact>
+				<name>num_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_stus_cd in ('P','A','L','S')</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_voluntary_terminations</name>
+				<column>vlntry_trmnt_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_terminations</name>
+				<column>trmnt_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_promotions</name>
+				<column>promo_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_demotions</name>
+				<column>dem_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_hires</name>
+				<column>hir_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_rehires</name>
+				<column>reh_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_transfers</name>
+				<column>xfr_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_employees</name>
+				<column>pers_obj_id</column>
+				<aggregation>
+					<type>APPROX_COUNT_DISTINCT</type>
+					<arguments>
+						<argument>clnt_obj_id</argument>
+					</arguments>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>female_percentage</name>
+				<column>d_gndr_cd</column>
+				<matches>F</matches>
+				<aggregation>
+					<type>PERCENT</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>median_person_days</name> <!-- not very useful because of variable underlying period -->
+				<column>eff_person_days</column>
+				<aggregation>
+					<type>HIVE_PERCENTILE</type>
+					<arguments>
+						<argument>50</argument>
+					</arguments>
+				</aggregation>
+			</fact>
+
+		</facts>
+
+	</cube>
+
+</cubes> 

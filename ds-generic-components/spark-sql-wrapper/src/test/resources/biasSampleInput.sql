@@ -1,0 +1,1 @@
+select * from ${hiveconf:__GREEN_MAIN_DB__}.top_sampled

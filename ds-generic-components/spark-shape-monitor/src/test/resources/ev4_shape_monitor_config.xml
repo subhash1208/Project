@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables>
+   <!--  <table dbname="ditdsbase" tablename="client_master" /> 
+
+    <table dbname="datacloud_nonprod_dit_base" tablename="employee_base_monthly">
+        <partitioncolumns>source_hr</partitioncolumns>
+        <excludecolumns>hr_job_dsc</excludecolumns>
+        <column name="eff_status_" expr="CASE WHEN status_ is not null THEN status_ END" max_null_pctg="10"/>
+        <column name="full_time_part_time_" valid_values="'PT','FT'" nullable="true" max_null_pctg="10"/>
+        <column name="annual_base_" max_value="40000" nullable="false" />
+        <column name="rate_type_" max_cardinality="2" min_cardinality = "2" max_null_pctg="8.74" />    
+        <column name="work_state_" max_null_pctg="8.73" />
+         <column name="work_zip_crc32" expr="crc32(work_zip_)"/>
+    </table>
+
+    <table dbname="ditdsbase" tablename="employee_monthly1" />
+
+    <table dbname="ditdsraw" tablename="optout_2018q4" />
+
+    <table dbname="ditdsraw" tablename="optout_2019q1" >
+         <partitioncolumns>p</partitioncolumns>
+         <uniquecolumns>region_code,company_code,product_cd</uniquecolumns>  
+    </table>
+ -->
+    <table dbname="testgreenbase" tablename="recruitment_core" >
+        <column name="time_to_fill" simple_deseason_detrend_metrics="MEAN:-5:5" />
+    </table>
+   
+   <!--   <table dbname="ditdsraw" tablename="ev4_dim_salaryplan">
+        <excludecolumns>clnt_obj_id</excludecolumns>
+        <column name="annl_sal_range_low_amt_" expr="CASE WHEN annl_sal_range_low_amt &gt;= 0 THEN annl_sal_range_low_amt END"/>
+        <column name="clnt_obj_id_" expr="crc32(clnt_obj_id)"/>
+    </table> -->
+</tables>

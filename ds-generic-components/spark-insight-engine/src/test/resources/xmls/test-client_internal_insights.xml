@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>rosie_client_internal_insights</name>
+	<type>CLIENT_INTERNAL</type>
+	<score_expression> <![CDATA[
+		ROUND(
+			CASE 
+				WHEN zscore_diff_[fact] > 1 OR zscore_pctg_diff_[fact] > 1 
+				THEN - GREATEST(zscore_diff_[fact] , zscore_pctg_diff_[fact]) * log(percentage_headcount / 100) 
+				WHEN zscore_diff_[fact] < -1 OR zscore_pctg_diff_[fact] < -1 
+				THEN - LEAST(zscore_diff_[fact] , zscore_pctg_diff_[fact]) * log(percentage_headcount / 100) 
+				WHEN percent_rank_[fact] > 75
+				THEN - (percent_rank_[fact]/100) * log (percentage_headcount / 100)
+				WHEN percent_rank_[fact] < 25
+				THEN (1 - percent_rank_[fact]/100) * log (percentage_headcount / 100)
+				ELSE 0 
+			END
+		, 2 ) 
+	]]></score_expression>
+
+	<dimensions>
+		<dimension type="invariant" partition_column="true">clnt_obj_id</dimension>
+		<dimension type="nullvariant" percentile_rank="true">d_job_cd</dimension>
+		<dimension type="nullvariant">d_work_loc_cd</dimension>
+		<dimension type="variant">d_reg_temp_cd</dimension>
+		<dimension type="variant">d_flsa_stus_cd</dimension>
+		<dimension type="variant">d_gndr_cd</dimension>
+		<hierarchy percentile_rank="true" name="manager">
+			<dimension type="nullvariant">mngr_layer_1</dimension>
+			<dimension type="nullvariant">mngr_layer_2</dimension>
+			<dimension type="nullvariant">mngr_layer_3</dimension>
+			<dimension type="nullvariant">mngr_layer_4</dimension>
+			<dimension type="nullvariant">mngr_layer_5</dimension>
+		</hierarchy>
+		<dimension type="nullvariant">d_hr_orgn_id</dimension>
+		<dimension type="variant">d_pay_rt_type_cd</dimension>
+		<dimension type="nullvariant">d_work_state_cd</dimension>
+		<dimension type="variant">d_full_tm_part_tm_cd</dimension>
+		<hierarchy percentile_rank_partition="true">
+			<dimension type="ephemeral" differences="1,2,3">yr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,4">qtr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,12">mnth_seq_nbr</dimension>
+		</hierarchy>
+	</dimensions>
+
+	<facts>
+		<fact>
+			<name>annualized_turnover_rt</name>
+			<name>annualized_voln_turnover_rt</name>
+			<name>internal_mobility_rate</name>
+			<name>female_percentage</name>
+		</fact>
+	</facts>
+	
+	<supportcolumns>
+		<column>headcount</column>
+		<column>percentage_headcount</column>
+	</supportcolumns>
+
+</insights> 

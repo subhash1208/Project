@@ -1,0 +1,5 @@
+// No module specific configuration
+
+dependencies {
+    compileOnly("com.oracle.database.jdbc:ojdbc8:${orcleWalletJarsVersion}") { transitive = false }
+}

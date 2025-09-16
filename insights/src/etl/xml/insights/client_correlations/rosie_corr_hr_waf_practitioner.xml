@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>rosie_corr_ind_practitioner</name>
+	<type>CUBECORRELATIONS</type>
+
+	<dimensions>
+		<dimension alwayson="true">clnt_obj_id</dimension>
+        <dimension alwayson="true">yr_cd</dimension>
+		<dimension>qtr_cd</dimension>
+	</dimensions>
+
+	<facts>
+		<fact>
+			<name>turnover_rate</name>
+            <name>overtime_ratio</name>
+            <name>leave_ratio</name>
+            <name>absence_ratio</name>
+		</fact>
+	</facts>
+
+</insights>

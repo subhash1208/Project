@@ -1,0 +1,34 @@
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+	id 'base' // For clean task
+	id 'scala'
+}
+
+repositories {
+    maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/central-maven-remote' }
+}
+
+group = 'org.shadow'
+version = '42.2.14'
+
+shadowJar {
+    archiveClassifier.set('')
+    configurations = [project.configurations.runtimeClasspath]
+    relocate 'org.postgresql', 'org.shadow.postgresql'
+    manifest {
+        inheritFrom project.tasks.jar.manifest
+    }	
+}
+
+dependencies{
+        implementation("org.postgresql:postgresql:${version}"){transitive = false}
+}
+
+task copyJar(type: Copy) {
+    from shadowJar
+    into '../shadow-libs/'
+}
+
+assemble.dependsOn copyJar
+

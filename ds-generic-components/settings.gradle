@@ -1,0 +1,10 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        maven { url 'https://artifactory.us.caas.oneadp.com/artifactory/gradle-plugins-maven-remote/' }
+    }
+}
+
+rootProject.name = 'ds-generic-components'
+
+include 'spark-data-sync','spark-adp-commons','spark-cube','spark-feature-engineering','spark-connect-by','spark-sql-wrapper','spark-insight-engine','rdbms-integration','spark-shape-monitor'

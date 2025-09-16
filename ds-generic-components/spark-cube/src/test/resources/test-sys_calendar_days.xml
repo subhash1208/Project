@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cubes>
+	<cube>
+		<name>tp_benchmark_hierarchy_only</name>
+		<dimensions>
+			<dimension mandatory="true">l2_code</dimension>
+			<dimension mandatory="true">country</dimension>
+	        <hierarchy>
+	        	<dimension>yr_cd</dimension>
+	        	<dimension>qtr_cd</dimension>
+	        	<dimension>mnth_cd</dimension>
+	        </hierarchy>
+	    </dimensions>
+	    <facts>
+	        <fact>
+	        	<name>avg_value</name>
+	        	<column>value</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+	        </fact>
+	    </facts>
+	    <postprocess>
+	    	<columns>
+	    		<column>sys_calendar_days</column>
+	    	</columns>
+	    </postprocess>
+	</cube>
+</cubes>

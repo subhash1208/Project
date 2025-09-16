@@ -1,0 +1,37 @@
+<insights>
+
+	<name>rosie_manager_diffs</name>
+	<type>CLIENT_INTERNAL</type>
+	<access>MANAGER</access>
+	
+	<dimensions>
+		<dimension type="invariant" partition_column="true">clnt_obj_id</dimension>
+		<dimension type="variant">d_job_cd</dimension>
+		<dimension type="variant" percentile_rank="true">d_work_loc_cd</dimension>
+		<dimension type="variant">d_reg_temp_cd</dimension>
+		<dimension type="variant">d_flsa_stus_cd</dimension>
+		<dimension type="variant">d_gndr_cd</dimension>
+		<hierarchy percentile_rank="true" name="manager">
+			<dimension type="variant">mngr_layer_1</dimension>
+			<dimension type="variant">mngr_layer_2</dimension>
+			<dimension type="variant">mngr_layer_3</dimension>
+			<dimension type="variant">mngr_layer_4</dimension>
+			<dimension type="variant">mngr_layer_5</dimension>
+		</hierarchy>
+		<hierarchy>
+			<dimension type="ephemeral" differences="1,2,3">yr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,4">qtr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,12">mnth_seq_nbr</dimension>
+		</hierarchy>
+	</dimensions>
+
+	<facts>
+		<fact>
+			<name>annualized_turnover_rt</name>
+			<name>annualized_voln_turnover_rt</name>
+			<name>internal_mobility_rate</name>
+			<name>female_percentage</name>
+		</fact>
+	</facts>
+
+</insights> 

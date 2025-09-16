@@ -1,0 +1,73 @@
+{
+    "_description": "EMI Insight Engine",
+    "_note": "EMI Insight Engine",
+    "file": "spark-insight-engine-22.06.11.f-InsightDriver_test-SNAPSHOT.jar",
+    "class-name": "com.adp.datacloud.ds.InsightDriver",
+    "files": ["emi_ins_tm_tf_edits_supervisor.sql","emi_ins_intl_bm_tm_tf_edits_supervisor.xml","emi_ins_bm_tm_tf_edits.sql"],
+    "py-files": [],
+    "jars": [],
+    "spark-config": {
+        "driver-cores": 5,
+        "driver-memory": 15,
+        "num-shuffle-partitions": 1600,
+        "conf": {
+          "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+            "spark.sql.broadcastTimeout":"36000",
+            "spark.driver.memoryOverhead": "2G",
+            "spark.kryoserializer.buffer.max": "1024m",
+            "spark.default.parallelism": 1600,
+            "spark.sql.analyzer.failAmbiguousSelfJoin": "false",
+            "spark.sql.storeAssignmentPolicy": "legacy",
+            "spark.sql.legacy.timeParserPolicy": "legacy"
+          }
+    },    
+    "args": [
+        {  
+            "key": "input-spec",
+            "value": "emi_ins_tm_tf_edits_supervisor.sql"
+        },
+        {
+            "key": "xml-config-file",
+            "value": "emi_ins_intl_bm_tm_tf_edits_supervisor.xml"
+        },
+        {
+            "key": "comparison-spec",
+            "value": "emi_ins_bm_tm_tf_edits.sql"
+        },
+        {
+            "key": "output-partition-spec",
+            "value": "environment"
+        },
+        {
+            "key": "output-db",
+            "value": "{{__BLUE_MAIN_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__GREEN_MAIN_DB__={{__GREEN_MAIN_DB__}}"
+        },
+        {
+          "key": "hiveconf",
+          "value": "__GREEN_RAW_DB__={{__GREEN_RAW_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__RO_GREEN_RAW_DB__={{__RO_GREEN_RAW_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__RO_GREEN_MAIN_DB__={{__RO_GREEN_MAIN_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__BLUE_MAIN_DB__={{__BLUE_MAIN_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__RO_BLUE_RAW_DB__={{__RO_BLUE_RAW_DB__}}"
+        }
+    ],
+    "jobcluster-config": {
+      "databricks-version": "10.4.x-scala2.12"
+      }
+  }

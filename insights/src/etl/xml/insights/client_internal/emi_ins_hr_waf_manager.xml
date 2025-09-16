@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>emi_ins_hr_waf_manager</name>
+	<type>CLIENT_INTERNAL</type>
+	<score_expression> <![CDATA[
+		ROUND(
+			CASE
+			    WHEN ABS(zscore_norm_diff_[fact]) IS NULL AND ABS(zscore_norm_pctg_diff_[fact]) IS NULL AND ABS(zscore_diff_[fact]) IS NULL AND ABS(zscore_pctg_diff_[fact]) IS NULL
+				THEN (CASE WHEN (percent_rank_[fact] < 50) THEN (100 - percent_rank_[fact])/100 ELSE (percent_rank_[fact]/100) END) * (1/(1 + percentage_headcount)) * 1/num_dimensions
+				WHEN ABS(zscore_norm_diff_[fact]) > 1 OR ABS(zscore_norm_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_norm_diff_[fact]) , ABS(zscore_norm_pctg_diff_[fact])) * 1/(1+ABS(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+				WHEN ABS(zscore_diff_[fact]) > 3 OR ABS(zscore_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_diff_[fact])/3, ABS(zscore_pctg_diff_[fact])) *  1/(1+ABS(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+				ELSE
+					GREATEST(
+						ABS(zscore_norm_diff_[fact]),
+						ABS(zscore_norm_pctg_diff_[fact]),
+						ABS(zscore_diff_[fact]/3),
+						ABS(zscore_pctg_diff_[fact])
+					) * 1/(1+ABS(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+			END
+		, 2 )
+	]]></score_expression>
+
+	<dimensions>
+		<dimension type="invariant" partition_column="true">clnt_obj_id</dimension>
+		<!--dimension type="invariant" partition_column="true">db_schema</dimension-->
+		<dimension percentile_rank="true" type="nullvariant">d_job_cd</dimension>
+		<dimension percentile_rank="true" type="nullvariant">d_hr_orgn_id</dimension>
+		<!--dimension type="variant">d_gndr_cd</dimension-->
+		<dimension percentile_rank_partition="true" type="invariant">mngr_pers_obj_id</dimension>
+		<hierarchy percentile_rank_partition="true">
+			<dimension type="ephemeral" differences="1" partition_column="true">yr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,4">qtr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,12">mnth_seq_nbr</dimension>
+		</hierarchy>
+		<hierarchy percentile_rank="true">
+			<dimension type="nullvariant">d_work_cntry_cd</dimension>
+			<dimension type="nullvariant">d_work_state_cd</dimension>
+			<!--dimension type="nullvariant">d_work_city_cd</dimension-->
+			<dimension type="nullvariant">d_work_loc_cd</dimension>
+		</hierarchy>
+	</dimensions>
+
+	<facts>
+		<fact>
+			<name>turnover_rate</name>
+			<name>voln_turnover_rate</name>
+			<name>internal_mobility_rate</name>
+			<!--name>female_percentage</name-->
+			<name>newhire_turnover_rate</name>
+			<name>average_tenure</name>
+			<!--name>span_of_control</name>
+			<name>compa_ratio</name-->
+			<name>avg_time_to_promotion</name>
+			<name>retention_rate</name>
+			<name>leave_percentage</name>
+			<name type="non-rate">num_hires</name>
+			<name type="non-rate">num_terminations</name>
+			<name type="non-rate">headcount</name>
+			<!--name type="non-rate">inactive_headcount</name>
+			<name type="non-rate">parttime_headcount</name>
+			<name type="non-rate">temp_headcount</name-->
+		</fact>
+	</facts>
+
+	<supportcolumns>
+	    <column>num_employees</column>
+		<column>headcount</column>
+		<column>percentage_headcount</column>
+		<!--column>retn_period_strt_person_cnt</column>
+		<column>retn_period_end_person_cnt</column-->
+		<column>period_cd</column>
+	</supportcolumns>
+
+</insights>

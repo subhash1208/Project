@@ -1,0 +1,5 @@
+{
+    "dxr-product-name": "oracle_tgt_query.sql",
+    "hive-table": "${hiveconf:__BLUE_MAIN_DB__}.t_ins_load_stus",
+    "target-rdbms-table": "t_ins_load_stus"
+}

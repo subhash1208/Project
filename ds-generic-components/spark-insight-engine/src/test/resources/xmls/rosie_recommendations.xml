@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<recommender>
+     <name>rosie_recommender_dataset</name>
+     <dimensions>
+        <dimension type="xor">hr_orgn_id</dimension>
+        <dimension type="xor">job_cd</dimension>
+        <hierarchy type='time'>
+                <dimension>yr_cd</dimension>
+                <dimension>qtr_cd</dimension>
+                <dimension>mnth_cd</dimension>
+        </hierarchy>
+        <hierarchy type='area'>
+                <dimension>iso_3_char_cntry_cd</dimension>
+                <dimension type = "xor">state_prov_cd</dimension>
+                <dimension>work_loc_cd</dimension>
+         </hierarchy>
+        <dimension>trmnt_rsn</dimension>
+        <dimension>adp_lense_cd</dimension>
+        <dimension>inds_cd</dimension>
+        <dimension>sector_cd</dimension>
+        <dimension>super_sect_cd</dimension>
+        <dimension>mngr_pers_obj_id</dimension>
+      </dimensions>
+
+      <metacolumns>
+            <meta>ins_type</meta>
+            <meta>mtrc_ky</meta>
+      </metacolumns>
+
+      <lblEncodeColumns>
+           <lblencode>dimension_comb</lblencode>
+           <lblencode>usr_id</lblencode>
+      </lblEncodeColumns>
+
+      <onehotColumns>
+           <onehot>dimension_comb</onehot>
+           <onehot values="2,3,4,5,6,7,8">age_band_ky_</onehot>
+           <onehot>flsa_status_</onehot>
+           <onehot>is_manager</onehot>
+           <onehot>nbr_of_diments</onehot>
+      </onehotColumns>       
+
+</recommender>

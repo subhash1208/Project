@@ -1,0 +1,15 @@
+{
+  "_description": "Load T_FACT_INS table based on emi_ml_inferences",
+    "application-name": "insights_t_fact_ins validation",
+    "notebook-file": "t_fact_ins_validation.py",
+    "notebook-param": [             
+      {
+          "key": "GREEN_MAIN_DB",
+          "value": "{{__GREEN_MAIN_DB__}}"
+      },
+      {
+        "key": "BLUE_MAIN_DB",
+        "value": "{{__BLUE_MAIN_DB__}}"
+    }
+   ] 
+}

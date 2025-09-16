@@ -1,0 +1,956 @@
+{
+    "notification_group": "Platform-DataScience",
+    "opsgenie_notification_emails": [
+        "datacloud_dataScience_workflowalerts_email@gpt-adp-opsgenie.opsgenie.net"
+    ],
+    "workflows": [
+        {
+            "_description": "EMI Insights Project DWH Inference Pipeline(Weekly & Monthly)",
+            "workflow_name": "EMI_USER_CLICK_DATA_LOAD",
+            "steps": [
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/notebooks/emi_usr_view_data_rjn.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/tests/validate_emi_usr_data_in_table_wxh.json"
+                    ]
+                }
+            ]
+        },
+        {
+            "_description": "EMI Insights Project DWH Inference Pipeline(Weekly & Monthly)",
+            "workflow_name": "EMI_ETL_PIPELINE",
+            "notification_group": "Analytics-Experience",
+            "steps": [
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_non_live_clnts_xwf.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_t_rpt_to_hrchy_sec_fuk.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_t_supvr_rpt_to_hrchy_sec_jos.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_base_hr_waf_epd.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_base_hr_wef_dei.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_base_tm_tf_fqp.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_base_tm_tf_excp_yyq.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_base_pr_pef_jtj.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_base_tm_tf_edits_ghy.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/base/emi_base_tm_tf_excp_mssd_pnch_cdz.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_supvr_hrchy_ggh.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_retn_prac_bva.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_hr_wef_jlk.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_excp_jhf.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_edits_azp.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_fdn.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_hr_waf_ewb.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_pr_pef_kna.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_hr_wef_mngr_ykc.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_retn_mngr_input_tyc.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_pr_pef_mngr_wgt.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_recom_metric_view_fia.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_retn_mngr_uwg.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_hr_waf_mngr_rbk.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_paycd_lbracct_wjt.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_mssd_pnchs_hgx.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_excp_etime_mngr_rfb.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_edits_etime_mngr_blb.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_ezlm_mngr_qqo.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_etime_mngr_cxx.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_hr_waf_tm_tf_icj.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_ezlm_supvr_lcd.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_mngr_zak.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_tm_tf_excp_wfm_bkq.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/emi_prep_hr_waf_supvr_zky.json"
+                    ]
+                },
+                {
+                    "type": "cube",
+                    "style": "parallel",
+                    "files": [
+                        "etl/cube/emi_cube_hr_waf_practitioner",
+                        "etl/cube/emi_cube_hr_wef_practitioner",
+                        "etl/cube/emi_cube_tm_tf_excp_practitioner"
+                    ]
+                },
+                {
+                    "type": "cube",
+                    "style": "parallel",
+                    "files": [
+                        "etl/cube/emi_cube_pr_pef_practitioner",
+                        "etl/cube/emi_cube_tm_tf_practitioner",
+                        "etl/cube/emi_cube_tm_tf_edits_practitioner"
+                    ]
+                },
+                {
+                    "type": "cube",
+                    "style": "parallel",
+                    "files": [
+                        "etl/cube/emi_cube_hr_waf_manager",
+                        "etl/cube/emi_cube_hr_wef_manager",
+                        "etl/cube/emi_cube_tm_tf_supervisor"
+                    ]
+                },
+                {
+                    "type": "cube",
+                    "style": "parallel",
+                    "files": [
+                        "etl/cube/emi_cube_pr_pef_manager",
+                        "etl/cube/emi_cube_tm_tf_excp_manager",
+                        "etl/cube/emi_cube_tm_tf_excp_supervisor"
+                    ]
+                },
+                {
+                    "type": "cube",
+                    "style": "parallel",
+                    "files": [
+                        "etl/cube/emi_cube_tm_tf_edits_manager",
+                        "etl/cube/emi_cube_tm_tf_edits_supervisor",
+                        "etl/cube/emi_cube_tm_tf_excp_supervisor_mnth_wfm"
+                    ]
+                },
+                {
+                    "type": "cube",
+                    "style": "parallel",
+                    "files": [
+                        "etl/cube/emi_cube_tm_tf_excp_supervisor_qtr_wfm",
+                        "etl/cube/emi_cube_tm_tf_manager"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "style": "parallel",
+                    "files": [
+                        "etl/insight/move_files_to_s3.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_hr_waf_practitioner_spark_tin.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_practitioner_spark_sqe.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_excp_practitioner_spark_scn.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_pr_pef_practitioner_spark_iet.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_hr_waf_manager_spark_mzf.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_edits_practitioner_spark_lpk.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_pr_pef_manager_spark_wpq.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_edits_manager_spark_npi.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_excp_manager_spark_xzq.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_excp_supervisor_spark_lxd.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_supervisor_spark_yly.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_edits_supervisor_spark_tdh.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_manager_spark_jir.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_hr_waf_practitioner_spark_ovp.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_tm_tf_edits_practitioner_spark_hpd.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_hr_waf_manager_spark_ygf.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_pr_pef_practitioner_spark_cuz.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_tm_tf_edits_manager_spark_uuv.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_pr_pef_manager_spark_xnw.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_tm_tf_edits_supervisor_spark_utw.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_tm_tf_manager_spark_pjz.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_tm_tf_practitioner_spark_xrc.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_intl_bm_tm_tf_supervisor_spark_nlj.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/t_today_fiscal_info_nvq.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/top_risk/top_dwh_extract_trh_nyx.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/top_risk/top_mngr_hierarchy_irj.json"
+                    ]
+                },
+                {
+                    "type": "cube",
+                    "style": "parallel",
+                    "files": [
+                        "etl/top_risk/cube/client_trnovr_risk_cube",
+                        "etl/top_risk/cube/mngr_trnovr_risk_cube",
+                        "etl/top_risk/cube/inds_turnover_risk_cube"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/top_risk/clnt_mngr_bnchmrk_trnovr_risk_yni.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/top_risk/inds_bnchmrk_trnovr_risk_temp_nhi.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/top_risk/inds_bnchmrk_trnovr_risk_plc.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/top_risk/top_risk_insights_imh.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/top_risk/top_risk_insights_outliers_sle.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/top_risk/t_fact_ins_risk_bbu.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_fact_ins_clnt_int_bm_ses.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_fact_ins_clnt_int_oho.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_fact_insights_supvr_jzj.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_fact_insights_mbm.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/emi_recommend_ins_meta_xea.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_ins_splunk_hist_lrk.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_fact_ins_staging_ytk.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_ins_load_stus_flt.json"
+                    ]
+                },
+                {
+                    "type": "workflow",
+                    "_description": "Insight Recommender Feature Generation and Batch Prediction",
+                    "files": [
+                        "APP-INSIGHT-RECOMMENDER-PIPELINE-FEATURE-GENERATION",
+                        "APP-INSIGHT-RECOMMENDER-PIPELINE-BATCH-INFERENCE"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/notebooks/t_fact_ins_coh.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/notebooks/t_fact_ins_validation_jey.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_fact_insights_archive_sce.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_dim_ins_arm_stats_lqt.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/prepare_exports/t_ins_load_stus_archive_see.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/export_redshift/t_fact_ins_export_redshift_kyr.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_cvx.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/export_redshift/t_ins_load_stus_redshift_export_djh.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_uuw.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_fact_ins_stg_redshift_wfn_pi_core.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_vtgcore.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_lfncore.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_wfncore_2.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_wfncore_3.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_evcore.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_ev5core.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_adpcore.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_wfn_pi_core.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_vtgcore.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_lfncore.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_wfncore_2.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_wfncore_3.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_evcore.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_ev5core.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_adpcore.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfn_pi_core.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_vtgcore.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_lfncore.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfncore_2.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfncore_3.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_evcore.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_ev5core.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_adpcore.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_wfn_pi_core.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_vtgcore.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_lfncore.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_wfncore_2.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_wfncore_3.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_evcore.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_ev5core.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_adpcore.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_fact_ins_stg_redshift_wfncore_3.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_wfncore_3.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfncore_3.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfncore_3.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_fact_ins_stg_redshift_wfnpisalescore.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_wfnsalescore.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_wfnpisalescore.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_wfnsalescore.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfnpisalescore.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfnsalescore.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_wfnpisalescore.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_wfnsalescore.json"
+                    ]
+                },
+                {
+                    "type": "export",
+                    "files": [
+                        "etl/export_redshift/t_fact_ins_stg_redshift_wfncore_6.json",
+                        "etl/export_redshift/t_fact_ins_stg_redshift_wfncore_7.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_wfncore_6.json",
+                        "etl/export_redshift/t_fact_empl_ins_stg_redshift_wfncore_7.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfncore_6.json",
+                        "etl/export_redshift/t_ins_load_stus_redshift_wfncore_7.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_wfncore_6.json",
+                        "etl/export_redshift/t_ins_splunk_hist_redshift_wfncore_7.json"
+                    ]
+                }
+            ]
+        },
+        {
+            "_description": "Worflow to load T_KPI table",
+            "workflow_name": "EMI_LOAD_T_KPI",
+            "notification_group": "Analytics-Experience",
+            "steps": [
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/one_time_load/emi_t_kpi_odm.json"
+                    ]
+                }
+            ]
+        },
+        {
+            "_description": "EMI Migration pipeline",
+            "workflow_name": "EMI_MIGRATION_PIPELINE",
+            "notification_group": "Analytics-Experience",
+            "steps": [
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/env_migration_drop_tables_cdt.json"
+                    ]
+                }
+            ]
+        },
+        {
+            "_description": "EMI Recommender Training pipeline",
+            "workflow_name": "EMI_TRAINING_PIPELINE",
+            "notification_group": "Analytics-Experience",
+            "steps": [
+                {
+                    "type": "processing",
+                    "files": [
+                        "ml/config/processing_job.json"
+                    ]
+                },
+                {
+                    "type": "training",
+                    "files": [
+                        "ml/config/training_job.json"
+                    ]
+                },
+                {
+                    "type": "create_model",
+                    "files": [
+                        "ml/config/create_model.json"
+                    ]
+                }
+            ]
+        },
+        {
+            "_description": "EMI Recommender  Batch Inference Pipeline",
+            "workflow_name": "EMI_BATCH_INFERENCE_PIPELINE",
+            "notification_group": "Analytics-Experience",
+            "steps": [
+                {
+                    "type": "transform",
+                    "files": [
+                        "ml/config/transform_job.json"
+                    ]
+                }
+            ]
+        },
+        {
+            "_description": "EMI Recommender  Inference Pipeline",
+            "workflow_name": "EMI_INFERENCE_PIPELINE",
+            "notification_group": "Analytics-Experience",
+            "steps": [
+                {
+                    "type": "endpoint_deployer",
+                    "files": [
+                        "ml/config/endpoint_job.json"
+                    ]
+                }
+            ]
+        },
+        {
+            "_description": "EMI Low value Headline Test pipeline",
+            "workflow_name": "EMI_TESTING_PIPELINE",
+            "steps": [
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/insight/emi_ins_tm_tf_excp_practitioner_spark_brh.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/sql/t_fact_ins_test_ijp.json"
+                    ]
+                }
+            ]
+        },
+        {
+            "_description": "EMI Export Tables Backup",
+            "workflow_name": "EMI_EXPORT_TABLES_BACKUP",
+            "steps": [
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/export/t_fact_ins_bkp_bci.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/export/t_fact_empl_ins_stg_bkp_uqf.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/export/t_ins_load_stus_bkp_bcp.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/export/t_ins_splunk_hist_bkp_kgw.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/notebooks/emi_recommender_dataset_bkp_edy.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/notebooks/multi_arm_stats_bkp_gsn.json"
+                    ]
+                },
+                {
+                    "type": "trigger_databricks_job",
+                    "name": "",
+                    "files": [
+                        "etl/notebooks/emi_prep_recom_metric_view_bkp_kxy.json"
+                    ]
+                }
+            ]
+        }
+    ]
+}

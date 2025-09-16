@@ -1,0 +1,20 @@
+{
+    "spark-config": {
+        "driver-cores": 5,
+        "driver-memory": 15,
+        "conf": {
+          "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+            "spark.sql.broadcastTimeout":"36000",
+            "spark.driver.memoryOverhead": "2G",
+            "spark.kryoserializer.buffer.max": "1024m",
+            "spark.sql.shuffle.partitions": 1600,
+            "spark.default.parallelism": 1600,
+            "spark.sql.analyzer.failAmbiguousSelfJoin": "false",
+            "spark.sql.storeAssignmentPolicy": "legacy",
+            "spark.sql.legacy.timeParserPolicy": "legacy"
+          }
+    },
+    "xml-content": "insight_validations.xml",
+    "shape-name": "insight_validations",
+    "quick-run": false
+    }

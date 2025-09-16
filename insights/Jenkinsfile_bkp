@@ -1,0 +1,108 @@
+// NOTE: This file SHOULD NOT BE MODIFIED BY DEVELOPERS under normal circumstances, and hence is added to gitignore
+// Please reach out to DSArch if you have strong reasons to allow modification of this file.
+// Utility function to pull out the latest version from a pom.xml file content
+def latestVersion(pomXml) {
+    def matcher = (pomXml =~ '<latest>(.+)</latest>')
+    matcher ? matcher[0][1] : null
+}
+
+// The below will be inotialized in 'Init' stage
+def APPLICATION_BUILD_VERSION
+
+pipeline {
+
+    environment {
+        ARTIFACTORY_CREDENTIALS           = credentials('new-artifactory-credentials')
+        GIT_AUTH = credentials('dsarchsvc_write')
+    }
+
+    agent { label 'slave-cdk' }
+    options { disableConcurrentBuilds() }
+    stages {
+
+        stage('Init') {
+            steps{
+                script{
+                    // The Publish behavior is different while on different branches
+                    def branchName = "${BRANCH_NAME}".replace("/","%2F")
+                    def repoName="${JOB_NAME}".replace("/${branchName}","")
+                    def releasePom = sh (
+                        script: "curl -s https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local/com/adp/datacloud/ds/${repoName}/maven-metadata.xml",
+                        returnStdout: true
+                    )
+                    def mostRecentReleaseVersion = latestVersion(releasePom)
+                    def gradleProperties = sh (
+                        script: "./gradlew properties -q",
+                        returnStdout: true
+                    )
+                    def projectVersion = gradleProperties.split( '\n' ).find { it.startsWith( 'version:' ) }.replace('version: ','')
+                    def releaseVersion = projectVersion.replace('-SNAPSHOT','')  // This shall be used only while building from master branch
+
+                    if (mostRecentReleaseVersion == releaseVersion) {
+                        echo "ERROR: Gradle Project version is not updated in gradle.properties. You may have recently merged master into this branch. Please bump up the version to proceed with build."
+                        sh "exit 1"
+                    }
+                    if (env.BRANCH_NAME.matches(/master.*/)) {
+                        // Use the release version from gradle.properties.
+                        // Release versions shall be allowed ONLY from master branch
+                        APPLICATION_BUILD_VERSION = "$releaseVersion"
+                    } else {
+                        APPLICATION_BUILD_VERSION = "$releaseVersion-SNAPSHOT"
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    echo "Generating artifact(s) with version - $APPLICATION_BUILD_VERSION"
+                    sh "./gradlew -Pversion=$APPLICATION_BUILD_VERSION assemble"
+                    echo "Generated artifact(s) with version - $APPLICATION_BUILD_VERSION"
+                }
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                script {
+                    echo "Generating artifact(s) with version - $APPLICATION_BUILD_VERSION"
+                    sh "./gradlew -Pversion=$APPLICATION_BUILD_VERSION uploadArchives"
+                    echo "Generated artifact(s) with version - $APPLICATION_BUILD_VERSION"
+                }
+            }
+        }
+    }
+    post {
+        success {
+            script {
+                if (env.BRANCH_NAME.matches(/master.*/) ) {
+                    sh """
+                    echo "tagging the build"
+                    git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
+                    echo "v$APPLICATION_BUILD_VERSION"
+                    git tag "v$APPLICATION_BUILD_VERSION"
+                    git push origin "v$APPLICATION_BUILD_VERSION"
+                    """
+
+                    def APPLICATION_NEXT_VERSION = sh (
+                        script: """echo "$APPLICATION_BUILD_VERSION" | perl -pe 's/^((\\d+\\.)*)(\\d+)(.*)\$/\$1.(\$3+1).\$4/e' | tr -d '\\n'""",
+                        returnStdout: true
+                    )
+
+                    sh """
+                    echo "incrementing the version in develop branch"
+                    git checkout develop
+                    git pull --no-tags
+                    sed -i "s/version=.*/version=$APPLICATION_NEXT_VERSION/g" gradle.properties
+                    cat gradle.properties
+                    git add gradle.properties
+                    git commit -m 'AUTO UPGRADING VERSION to $APPLICATION_NEXT_VERSION'
+                    git push
+                    """
+                    // nextVersion=`echo $projectVersion | perl -ne 'chomp; print join(".", splice(@{[split/\\./,$_]}, 0, -1), map {++$_} pop @{[split/\\./,$_]}), "\\n";'`
+                }
+            }
+        }
+    }
+}

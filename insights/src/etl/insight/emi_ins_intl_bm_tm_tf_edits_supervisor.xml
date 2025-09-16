@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>emi_ins_intl_bm_tm_tf_edits_supervisor</name>
+	<type>CLIENT_INTERNAL_BM</type>
+	<score_expression> <![CDATA[
+		ROUND(
+			CASE
+				WHEN ABS(zscore_norm_diff_[fact]) > 1 OR ABS(zscore_norm_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_norm_diff_[fact]) , ABS(zscore_norm_pctg_diff_[fact])) * 1/num_dimensions
+				WHEN ABS(zscore_diff_[fact]) > 3 OR ABS(zscore_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_diff_[fact])/3, ABS(zscore_pctg_diff_[fact])) * 1/num_dimensions
+				ELSE
+					GREATEST(
+						ABS(zscore_norm_diff_[fact]),
+						ABS(zscore_norm_pctg_diff_[fact]),
+						ABS(zscore_diff_[fact]/3),
+						ABS(zscore_pctg_diff_[fact])
+					) * 1/num_dimensions
+			END
+		, 2 )
+	]]></score_expression>
+
+	<dimensions>
+		<dimension type="invariant" partition_column="true">clnt_obj_id</dimension>
+		<!--dimension type="invariant" partition_column="true">db_schema</dimension-->
+		<hierarchy>
+			<dimension type="invariant" partition_column="true">yr_seq_nbr</dimension>
+			<dimension type="invariant" partition_column="true">qtr_seq_nbr</dimension>
+			<dimension type="invariant" partition_column="true">mnth_seq_nbr</dimension>
+		</hierarchy>
+		<!--dimension type="invariant">wk_seq_nbr</dimension-->
+	</dimensions>
+
+    <zscore_filter>(tot_rpt_headcount &gt;= 1000 and percentage_headcount &gt;= 3) or (tot_rpt_headcount &gt;= 100 and tot_rpt_headcount &lt;= 1000 and percentage_headcount &gt;= 5)
+     or (tot_rpt_headcount &gt;= 10 and tot_rpt_headcount &lt;= 100 and num_employees &gt;= 5) or (tot_rpt_headcount &lt; 10 and num_employees &gt;= 3)</zscore_filter>
+	 
+	<facts>
+		<fact>
+			<name>edits_count</name>
+		</fact>
+	</facts>
+
+	<supportcolumns>
+		<column>environment</column>
+	    <column>num_employees</column>
+		<column>tot_rpt_headcount</column>
+		<column>edits_count_events</column>
+		<column>job_cd</column>
+		<!--column>gndr_cd</column-->
+		<column>hr_orgn_id</column>
+		<column>supvr_pers_obj_id</column>
+		<column>work_cntry_cd</column>
+		<column>work_state_cd</column>
+		<column>percentage_headcount</column>
+		<!--column>work_city_cd</column-->
+		<column>work_loc_cd</column>
+		<column>period_cd</column>
+	</supportcolumns>
+
+<analysisgroups>
+		<analysisgroup>
+			<name>clnt_obj_id</name>
+			<name>yr_seq_nbr</name>
+			<name>qtr_seq_nbr</name>
+			<name>mnth_seq_nbr</name>
+		</analysisgroup>
+</analysisgroups>
+
+</insights>

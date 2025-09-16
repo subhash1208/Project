@@ -1,0 +1,147 @@
+// NOTE: This file SHOULD NOT BE MODIFIED BY DEVELOPERS under normal circumstances, and hence is added to gitignore
+// Please reach out to DSArch if you have strong reasons to allow modification of this file.
+// Utility function to pull out the latest version from a pom.xml file content
+def latestVersion(pomXml) {
+    def matcher = (pomXml =~ '<latest>(.+)</latest>')
+    matcher ? matcher[0][1] : null
+}
+
+@Library('adp-jenkins') _
+// https://docs.onecicd.us.caas.oneadp.com/jenkins-pipeline/UTILS/?h=com.adp.pipeline.branch#branch-info
+import com.adp.pipeline.Branch 
+// https://docs.onecicd.us.caas.oneadp.com/jenkins-pipeline/UTILS/#semantic-version-semver                    
+import com.adp.pipeline.SemVer
+
+def BRANCH_INFO = Branch.info()
+
+pipeline {
+        environment {
+            BUILD_VERSION = "0.0.0"
+            MAVEN_GROUP = "com.adp.datacloud.ds"
+            GRADLE_BASE_IMAGE_NAME = "docker.artifactory.us.caas.oneadp.com/innerspace/gradle:6.9-jdk-8"
+            ARTIFACTORY_CREDENTIALS = credentials('new-artifactory-credentials')
+            PROJECT_VERSION = readJSON(file: 'project.json').version.toString()
+        }
+    agent {
+        label 'docker'
+    }
+
+    options { disableConcurrentBuilds() }
+    stages {
+
+        stage('Init') {
+             steps {
+                script {
+                    withContainer(GRADLE_BASE_IMAGE_NAME){
+                        def releasePom = sh(
+                            script: "curl -s https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local/com/adp/datacloud/ds/rdbms-integration/maven-metadata.xml",
+                            returnStdout: true
+                        )
+                        def mostRecentReleaseVersion = latestVersion(releasePom)
+                        def releaseVersion = PROJECT_VERSION.replace('-SNAPSHOT', '')
+                        print(releaseVersion)
+                        print(mostRecentReleaseVersion)
+
+                        if (mostRecentReleaseVersion == releaseVersion) {
+                            echo "ERROR: Project version is not updated in project.json. You may have recently merged master into this branch. Please bump up the version to proceed with build."
+                            sh "exit 1"
+                        }
+                    
+                        if (env.BRANCH_NAME == 'master') {
+                            BUILD_VERSION = readJSON(file: 'project.json').version.toString()
+                        } else if (env.BRANCH_NAME == 'develop') {
+                            BUILD_VERSION = "${readJSON(file: 'project.json').version}-SNAPSHOT"
+                        } else if (env.BRANCH_NAME.matches(/hotfix.*/)) {
+                            def suffix = env.BRANCH_NAME.replace("hotfix/", ".h-")
+                            BUILD_VERSION = "${readJSON(file: 'project.json').version}${suffix}-SNAPSHOT"
+                        }else if (env.BRANCH_NAME.matches(/support.*/)) {
+                            def suffix = env.BRANCH_NAME.replace("support/", ".")
+                            BUILD_VERSION = "${readJSON(file: 'project.json').version}${suffix}-SNAPSHOT"
+                        }else {
+                            BUILD_VERSION = "${readJSON(file: 'project.json').version}.f-${BRANCH_INFO.id_normalized}-SNAPSHOT"
+                        }
+                        def PROJECT_OBJ = readJSON(file: 'project.json')
+                        PROJECT_OBJ.git = [: ]
+                        PROJECT_OBJ.git.url = env.GIT_URL
+                        PROJECT_OBJ.git.branch = env.BRANCH_NAME
+                        PROJECT_OBJ.git.commit = env.GIT_COMMIT
+                        PROJECT_OBJ.build = [: ]
+                        PROJECT_OBJ.build.url = env.BUILD_URL
+                        PROJECT_OBJ.build.version = BUILD_VERSION.toString()
+                        writeJSON(file: 'project.json', json: PROJECT_OBJ)
+                        sh 'cat project.json'
+                    }
+                }
+            }
+        }
+        stage("SonarScan"){     
+            when {
+                expression {
+                    env.BRANCH_NAME.matches(/develop.*/)
+                }
+            }      
+            steps{
+                script{
+                   catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                            sonarScan sonarHostUrl: 'https://sonar.singleglobaldataplatform.us.caas.oneadp.com',
+                            projectModel: [name: 'ds-generic-components', version: PROJECT_VERSION],   
+                            skipBuild: true,
+                            gradle: [gradleImage: 'docker.artifactory.us.caas.oneadp.com/innerspace/gradle:6.9-jdk-8'],                        
+                            credentials: 'ferris-wheel-sonar',
+                            failOnQualityGate: false                        
+                        }
+                }
+            }
+        }        
+        stage('Gradle Assemble & Publish') {
+            steps {
+                                 
+                    withContainer(GRADLE_BASE_IMAGE_NAME) {
+                        sh "gradle assemble -Pversion=$BUILD_VERSION -Pgroup=$MAVEN_GROUP "
+                        sh "gradle publish -Pversion=$BUILD_VERSION -Pgroup=$MAVEN_GROUP "
+                        sh "gradle uploadArchives -Pversion=$BUILD_VERSION "
+                    }
+            }
+        }
+        stage('Git Tagging & Project Version Increment') {
+            when {
+                expression {
+                    env.BRANCH_NAME == 'master'
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    script {
+                        if (currentBuild.currentResult == 'UNSTABLE' || currentBuild.currentResult == 'SUCCESS') {
+                            def PROJECT_OBJ = readJSON(file: 'project.json')
+                            def PROJECT_VERSION = PROJECT_OBJ.version.toString()
+                            def NEXT_PROJECT_VERSION = new SemVer(PROJECT_VERSION).bump('patch').toString()
+                            withCredentials([gitUsernamePassword(credentialsId: 'dsarchsvc_write', gitToolName: 'git-tool')]) {
+                            sh """
+                                echo "tagging the build"
+                                    git config --global user.email "dsarchsvc@ADP.com"
+                                    git config --global user.name "dsarchsvc"
+                                    echo "v$PROJECT_VERSION"
+                                    git tag "v$PROJECT_VERSION"
+                                    git push origin "v$PROJECT_VERSION"
+                                    echo "incrementing the version in develop branch"
+                                    git checkout develop
+                                    git pull --no-tags
+                                    """
+                                PROJECT_OBJ.version = NEXT_PROJECT_VERSION
+                                writeJSON(file: 'project.json', json: PROJECT_OBJ)
+                                sh """
+                                    cat project.json
+                                    git add project.json
+                                    git commit -m 'AUTO UPGRADING VERSION to $NEXT_PROJECT_VERSION'
+                                    git push
+                            """
+                            }
+                        }
+                    }
+                }
+            }
+        }        
+    }
+    
+}

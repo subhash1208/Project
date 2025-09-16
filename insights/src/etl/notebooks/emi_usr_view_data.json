@@ -1,0 +1,30 @@
+{
+    "_description": "splunk data extraction",
+    "application-name": "insights",
+    "notebook-file": "emi_usr_view_data.py",
+    "notebook-param": [             
+      {
+          "key": "blue_main_s3_bucket",
+          "value": "{{__BLUE_MAIN_S3_BUCKET__}}"
+      },
+      {
+        "key":"__BLUE_MAIN_DB__",
+        "value":"{{__BLUE_MAIN_DB__}}"
+      }
+   ],
+  "jobcluster-config":{
+        "databricks-version":"10.5.x-cpu-ml-scala2.12",
+        "master-instance-type":"m5d.4xlarge",
+        "slave-instance-type":"m5d.4xlarge",
+        "enable-elastic-disk":true,
+        "slave-instance-count":1,
+        "min-slave-instance-count":0,
+        "libraries":[
+            {
+                "pypi":{
+                    "package":"aws-secretsmanager-caching"
+                }
+            }
+        ]
+    }
+}

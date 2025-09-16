@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>rosie_corr_hr_ind_practitioner</name>
+	<type>CUBECORRELATIONS</type>
+
+	<dimensions>
+        <dimension alwayson="true">yr_cd</dimension>
+		<dimension alwayson="true" type="ephemeral" differences="1,2" window_order="true">qtr_cd</dimension>
+		<dimension alwayson="true">db_schema</dimension>
+		<dimension window_partition="true">clnt_obj_id</dimension>
+		<dimension alwayson="true" window_partition="true">sector_cd</dimension>
+	</dimensions>
+
+	<facts>
+		<fact>
+		    <name>turnover_rate</name>
+			<name>newhire_turnover</name>
+			<name>average_tenure</name>
+			<name>avg_time_to_promotion</name>
+			<name>average_earnings</name>
+            <name>overtime_perc</name>
+            <name>absence_perc</name>
+		</fact>
+	</facts>
+
+</insights>
+

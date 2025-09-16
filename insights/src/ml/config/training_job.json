@@ -1,0 +1,43 @@
+{
+    "InputDataConfig": [
+        {
+            "ChannelName": "train",
+            "DataSource": {
+                "S3DataSource": {
+                    "S3DataType": "S3Prefix",
+                    "S3Uri": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset_output/processing/full"
+                }
+            }
+        },
+        {
+            "ChannelName": "valid",
+            "DataSource": {
+                "S3DataSource": {
+                    "S3DataType": "S3Prefix",
+                    "S3Uri": "s3://{{__BLUE_MAIN_S3_BUCKET__}}/emi_recommender_dataset_output/processing/valid"
+                }
+            }
+        }
+    ],
+    "ResourceConfig": {
+        "InstanceType": "ml.m5.4xlarge",
+        "InstanceCount": 1,
+        "VolumeSizeInGB": 50
+    },
+    "HyperParameters": {
+        "sagemaker_program": "train.py",
+        "objective": "binary:logistic",
+        "class_weight": "balanced",
+        "n_estimators": "91",
+        "learning_rate": "0.38",
+        "colsample_bytree": "0.4",
+        "subsample":"0.8",
+        "min_child_weight": "2",
+        "max_depth":"9",
+        "gamma":"2.5"
+    },
+    "AlgorithmSpecification": {
+        "TrainingInputMode": "File"
+    },
+    "IsFinalJob": true
+}

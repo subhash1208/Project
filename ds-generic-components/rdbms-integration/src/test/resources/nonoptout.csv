@@ -1,0 +1,10 @@
+status_type_ky,status_type_dsc
+1,New Application
+2,Screening
+3,Interviewing
+4,Offer
+5,Rejected
+6,Keep On File
+7,Pre-Hire
+8,Hired
+9,Knockout

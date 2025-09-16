@@ -1,0 +1,38 @@
+<cubes>
+	<cube>
+		<name>dimension_only</name>
+		<dimensions>
+	        <dimension>l2_code</dimension>
+	    </dimensions>
+	    <supportcolumns>
+	    	<column>reg_temp_dsc</column>
+	    </supportcolumns>
+	    <facts>
+	        <fact>
+	        	<name>value_avg</name>
+	        	<column>value</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+	        </fact>
+	        <fact>
+	        	<name>value_distinct</name>
+	        	<column>value</column>
+	        	<!--  <expr>CASE WHEN value is not null THEN reg_temp_dsc ELSE NULL END</expr>  -->
+				<aggregation>
+					<type>COUNT_DISTINCT</type>
+				</aggregation>
+	        </fact>
+	        <!--  <fact>
+	        	<name>actual_percentile</name>
+	        	<column>value</column>
+				<aggregation>
+					<type>HIVE_PERCENTILE</type>
+					<arguments>
+						<argument>60</argument>
+					</arguments>
+				</aggregation>
+	        </fact> -->
+	    </facts>
+	</cube>
+</cubes>

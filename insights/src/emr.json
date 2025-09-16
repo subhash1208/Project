@@ -1,0 +1,7 @@
+{
+    "master_instance_type": "m5d.4xlarge",
+    "slave_instance_type": "m5d.4xlarge",
+    "slave_instance_count": 35,
+    "emr_version": "emr-5.33.0",
+    "enable_autoscaling": false
+}

@@ -1,0 +1,9 @@
+{
+    "dxr-product-name": "redshift_tgt_query_vtgcore.sql",
+    "hive-table": "${hiveconf:__BLUE_MAIN_DB__}.t_fact_ins_redshift",
+    "target-rdbms-table": "[OWNERID].T_FACT_INS_STG",
+    "target-db-type": "redshift",
+    "pre-sql-content": "emi_dw_pre_export_redshift_pilot.sql",
+    "post-sql-content": "emi_dw_post_export_redshift_pilot.sql",
+    "plsql-timeout": 18000
+}

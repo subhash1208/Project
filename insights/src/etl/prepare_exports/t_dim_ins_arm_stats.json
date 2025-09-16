@@ -1,0 +1,8 @@
+{
+    "sql-conf":[
+        {
+            "key":"__RECOMM_LEARNING_RATE__",
+            "value":"0.99"
+        }
+    ]
+}

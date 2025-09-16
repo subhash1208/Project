@@ -1,0 +1,16 @@
+{
+    "spark-config": {
+        "num-executors": 70,
+        "driver-cores": 2,
+        "driver-memory": 24,
+        "num-shuffle-partitions": 2400,
+        "conf": {
+          "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+            "spark.driver.memoryOverhead":"3G",
+            "spark.kryoserializer.buffer.max":"1024m",
+            "spark.sql.analyzer.failAmbiguousSelfJoin": "false",
+            "spark.sql.storeAssignmentPolicy": "legacy",
+            "spark.sql.legacy.timeParserPolicy": "legacy"
+        }
+    }
+}

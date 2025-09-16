@@ -1,0 +1,62 @@
+<cubes>
+	<cube>
+		<name>emi_cube_tm_tf_excp_practitioner</name>
+
+		<dimensions>
+		    <dimension mandatory="true">environment</dimension>
+			<dimension mandatory="true">clnt_obj_id</dimension>
+			<hierarchy>
+				<dimension mandatory="true">yr_cd</dimension>
+				<dimension>qtr_cd</dimension>
+				<dimension>mnth_cd</dimension>
+			</hierarchy>
+			<dimension mandatory="true">excp_type</dimension>
+			<hierarchy>
+				<dimension>work_cntry_cd</dimension>
+				<dimension xor-group-name="main">work_state_cd</dimension>
+				<dimension>work_loc_cd</dimension>
+			</hierarchy>
+			<dimension xor-group-name="main">clndr_wk_cd</dimension>
+			<dimension xor-group-name="main">job_cd</dimension>
+			<dimension xor-group-name="main">hr_orgn_id</dimension>
+		</dimensions>
+
+		<facts>
+
+			<fact>
+				<!-- This fact is used ONLY for the purpose of scoring, and hence an approximation is OK -->
+				<name>num_employees</name>
+				<column>pers_obj_id</column>
+				<aggregation>
+					<type>COUNT_DISTINCT</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">excp_hrs_in_secd</name>
+				<column>excep_hrs_in_secnd_nbr</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>exception_count</name>
+				<column>excp_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+		</facts>
+
+		<postprocess>
+			<!-- Composite Facts -->
+			<column>
+				<name>exception_hours</name>
+				<expr>excp_hrs_in_secd / 3600</expr>
+			</column>
+		</postprocess>
+
+	</cube>
+
+</cubes>

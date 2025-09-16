@@ -1,0 +1,1 @@
+SELECT databasename,databaseserver,'&ENV' AS environment FROM [iFarm].[dbo].[IPSYS_Database] with (nolock) where DatabaseType='EMPLOYEE' and databasename != 'iSBSEmployeeBase'

@@ -1,0 +1,7 @@
+{
+    "dxr-product-name": "redshift_tgt_query_ev5core.sql",
+    "hive-table": "${hiveconf:__BLUE_MAIN_DB__}.t_ins_splunk_hist_redshift",
+    "target-rdbms-table": "[OWNERID].t_ins_splunk_hist",
+    "target-db-type": "redshift",
+	"plsql-timeout": 18000
+}

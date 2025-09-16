@@ -1,0 +1,23 @@
+dependencies {
+    // oracle wallet jars
+    implementation("com.oracle.database.jdbc:ojdbc8:${orcleWalletJarsVersion}")
+    implementation("com.oracle.database.security:oraclepki:${orcleWalletJarsVersion}")
+    implementation("com.oracle.database.security:osdt_cert:${orcleWalletJarsVersion}")
+    implementation("com.oracle.database.security:osdt_core:${orcleWalletJarsVersion}")
+}
+
+jar {
+	// Make a fatjar by adding other dependency jars & drivers
+	dependsOn project(":spark-adp-commons").jar
+	from {
+		configurations.runtimeClasspath.filter({
+			it.name =~ /spark-adp-commons.*\.jar/ || // left for backward compatibility of gradle, and better readability
+					it.name =~ /scopt.*\.jar/ ||
+					it.name =~ /oraclepki.*\.jar/ || 
+					it.name =~ /osdt_cert.*\.jar/ || 
+					it.name =~ /osdt_core.*\.jar/
+		}).collect {
+			zipTree(it)
+		}
+	}
+}

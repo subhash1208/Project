@@ -1,0 +1,527 @@
+AP	account payable
+AR	account receivable
+AV	audio visual
+CG	cytogenetics
+DB	database
+DJ	disc jockey
+EO	equipment operator
+GM	general manager
+HR	human resource
+HW	hardware
+K9	canine
+QA	quality assurance
+QC	quality control
+A/C	air conditioning
+A/P	account payable
+A/R	account receivable
+ABE	adult basic education
+ABO	american board of opticianry
+ACQ	acquisition
+ADM	administration,administrative,administrator
+ADR	alternative dispute resolution
+ADV	advisor
+AFV	alternative fuel vehicle
+AMT	aviation maintenance technician
+AOD	argon oxygen decarborization
+APP	application
+ASL	american sign language
+ATH	athletic
+ATM	automatic teller machine
+ATV	all terrain vehicle
+AUD	audiologist,audiology
+AUX	auxiliary
+AVP	assistant vice president,associate vice president
+B&B	bed and breakfast
+BIZ	business
+BPM	business process management
+CAD	computer aided design
+CAE	computer aided engineering
+CCR	customer care representative
+CDM	certified dietary manager,clinical data management
+CEO	chief executive officer
+CFA	chartered financial analyst
+CFO	chief financial officer
+CHW	community health worker
+CIO	chief information officer
+CLS	clinical laboratory scientist
+CMA	certified medication aide
+CMM	coordinate measuring machine
+CMO	chief marketing officer
+CMT	certified massage therapist
+CNA	certified nursing assistant
+CNC	computer numerical control
+CNM	certified nurse midwife
+COO	chief operating officer
+CPC	certified professional coder
+CPO	certified prosthetist/orthotist
+CPR	cardiopulmonary resuscitation
+CRA	clinical research associate
+CRM	customer relationship management
+CSA	customer service associate
+CTO	chief technology officer
+CTT	computed tomography technologist
+CVT	cardiovascular technologist
+DBA	database administrator
+DDS	doctor of dental surgery
+E&I	electrical and instrument
+E/M	electro-mechanical
+EAP	employee assistance program
+ECG	echocardiographic
+EDI	electronic data interchange
+EDP	electronic data processing
+EEG	electroencephalogram,electroencephalographic
+EEO	equal employment opportunity
+EKG	electrocardiographic
+EMD	educable mentally disabled
+EMP	employment,employee
+EMS	emergency medical service
+EMT	emergency medical technician
+ENG	engineer,engineering
+ERP	enterprise resource planning
+ESA	equipment service associate
+EVP	executive vice president
+GED	general educational development
+GIS	geographic information system
+HHA	home health aide
+HIM	health information management
+HPE	health and physical education
+I&C	instrument and control
+I&R	installation and repair
+I/O	industrial/organizational
+ICU	intensive care unit
+ITS	information technology service,information technology specialist
+LAN	local area network
+LNA	licensed nursing assistant
+LNG	liquified natural gas
+LPC	licensed professional counselor
+LPN	licensed practical nurse
+LTA	library technical assistant
+LVN	licensed vocational nurse
+MCO	master control operator
+MFG	manufacturing
+MGR	manager
+MIS	management information system
+MKT	market
+MLT	medical laboratory technician
+MRI	magnetic resonance imaging
+O&M	Operation and Maintenance
+OEM	original equipment manufacturer
+OMS	oral and maxillofacial surgeon
+P/T	part time
+PAT	patient
+PED	pediatric
+PHN	public health nurse
+PIC	pharmacist in charge
+PKG	package
+PLC	programmable logic controller
+R&D	RESEARCH AND DEVELOPMENT
+SEO	search engine optimization
+SOC	social
+SPD	special day class
+SVP	senior vice president
+SYS	system
+TOX	toxicology
+TSA	transportation security administration
+WAN	wide area network
+GNA	Geriatric Nursing Assistant
+AGM	assistant general manager
+CA	chartered accountant
+FMS	financial management support
+GSN	general staff nurse
+HIS	heallth information services
+LAB	laboratory
+LAS	laiberal arts sciences
+CNO	computer network operations
+ACT	account
+AST	assistant
+INF	information
+TRN	training, trainer
+EQP	equipment
+HYG	hygiene
+HSG	housing
+PWR	power
+PIO	public information officer
+CHF	chief
+ADJ	adjunct
+HLP	helper
+IPR	intellectual property rights
+BOM	bill of material
+OSS	operations support system
+BSS	business support system
+CSO	chief strategy officer
+NOC	network operations center
+OAT	operation acceptance test
+ICT	information and communication technology
+FP&A	financial planning and analysis
+ACAD	academic
+ACCT	account
+ACNT	account
+APPL	application,applicator
+APPS	application
+APPT	appointment
+ASST	assistant
+ATCS	air traffic control specialist
+ATTD	attendant
+BLDG	building
+BLLG	billing
+BMET	biomedical equipment technician
+CADD	computer aided design and drafting
+CCIE	cisco certified internetwork expert
+CCNP	cisco certified network professional
+CCRN	critical care registered nurse
+CHEM	chemistry
+CHMN	executive
+CHNL	channel
+CLSF	classification
+CMPL	compliance
+CMTY	community
+CNCR	cancer
+CNSL	counselor
+CNTL	control
+COLL	collection,collector
+COMM	communication
+COMP	compensation,computer,computing
+CONF	conference
+CONS	consultant,consulting
+CORP	corporate
+COTA	certified occupational therapy assistant
+CPHT	certified pharmacy technician
+CRTN	certification
+CRTT	certified respiratory therapy technician
+CTLG	cataloging
+CTRL	control
+CTRS	certified therapeutic recreation specialist
+CUST	customer
+CYTO	cytogenetic
+DEPT	department,departmental
+DEVL	developer,development,developmental
+DIAG	diagnostic
+DIVR	diversity
+DNAP	doctor of nurse anesthesia practice
+DUPL	duplicating
+ENGG	engineering
+ENGR	engineer
+EVAL	evaluation
+EXEC	executive
+GOVT	government
+HLTH	health
+HOSP	hospital
+HRIS	human resource information system
+HRLY	hourly
+IMPL	implementation
+LANG	language
+LCSW	licensed clinical social worker
+LRNG	learning
+MGMT	management
+MKRG	marketing
+MKTG	marketing
+MNFG	manufacturing
+MNGR	manager
+NRSG	nursing
+NTWK	network
+PLNG	planning
+PRES	president
+QLTY	quality
+QUAL	quality
+RECR	recruitment
+RFID	radio frequency identification device
+RPTG	reporting
+RSCH	research
+STGY	strategy
+SUPP	support
+SUPR	supervisor
+SUPV	supervisor
+SVCS	services
+SYST	system
+TEMP	temporary
+TRNG	training
+TRNR	trainer
+UNIV	university
+UTIL	utility
+PRGM	program
+SPVR	supervisor
+TRNE	trainee
+EQTY	equity
+FLSA	fair labour standard act
+TRVL	travel
+EQPT	equipment
+HLPR	helper
+RGNL	regional
+SRVC	service
+DSP	digital signal processing
+PM&R	physical medicine and rehabilitation
+ACCNT	account
+ACCTG	accounting
+ACCTS	accounts
+AMBUL	ambulatory
+ANLST	analyst
+ANLYS	analysis
+APPLD	applied
+ARCHT	architect
+ASBES	asbestos
+ASSOC	associate
+ASSUR	assurance
+BASBL	baseball
+BSKTB	basketball
+CHANC	chancellor
+CMPTR	computer
+CNSLT	consultant
+CNTRL	control
+CONST	construction
+COORD	coordinator
+DISAB	disability
+EDUCR	educator
+ENG'G	engineering
+ENGRG	engineering
+EQUIP	equipment
+Gov't	government
+HORTI	horticulturist
+HW/SW	hardware/software
+Implt	implementation
+INFEC	infection
+INPAT	inpatient
+INSTR	instruction,instructional,instructor
+INT'L	international
+INTNL	international
+INTRN	intern
+Int'l	international
+MAINT	maintenance
+MAMMO	mammography
+MEDCN	medicine
+MERCH	merchandise
+MGMNT	management
+OBGYN	obstetrics gynecology
+ONCOL	oncology
+OPTOM	optometric
+ORTHO	orthopaedic
+OWDPM	offender workforce development program manager
+Org'l	organizational
+PHYSN	physician
+PRACT	practice
+PRODU	producer
+PROMO	promotion
+PRPTY	property
+PRTNR	partner
+PTNRS	partner
+QULTY	quality
+REDRC	regional economic development resource center
+REHAB	rehabilitation
+RESID	residence,residency,resident
+RSRCS	resource
+SCADA	supervisory control and data acquisition
+SCHED	scheduler,scheduling
+SPCST	specialist
+SPECT	spectroscopist
+SPLST	specialist
+SRVCS	service
+STRAT	strategy
+SUPER	supervisor
+SUPPT	support
+SUPVR	supervisor
+TCHNG	teaching
+TRANS	transfer
+TREAS	treasurer,treasury
+TRTMT	treatment
+COMPL	compliance
+EQPMT	equipment
+FKLFT	forklift
+401(K)	401k
+ACCTNG	accounting
+ADMISS	admission
+ADVNCD	advanced
+Analyt	analyst
+BIOMED	biomedical
+CHLDHD	childhood
+CONSMR	consumer
+CONTIN	continuing
+Dvlpmt	development
+HLPDSK	helpdesk
+INVEST	investigation
+LICNSD	licensed
+MKTING	marketing
+MULTIM	multimedia
+NWBORN	newborn
+OB/GYN	obstetrics gynecology
+OUTPAT	outpatient
+PHYSIO	physiologist
+PRESNT	presentation
+PRGRMR	programmer
+PROMOS	promotion
+RADCON	radiation control,radiological control
+RECRTG	recruiting
+REFRIG	refrigeration
+REFURB	refurbish
+SCNDRY	secondary
+SPCLST	specialist
+SPECIA	special,specialist
+STATIS	statistical
+Technl	technical
+WAREHS	warehouse
+WELLNS	wellness
+RESNET	research network
+E-COMM	e-commerce
+SW ENG	software engineer
+SW REG	southwest regional
+TM LDR	team leader
+OB GYN	obstetrics gynecology
+RN BSN	registered nurse bachelor of science in nursing
+SW DEV	software developer
+ANLYTCS	analytics
+BIOINFO	bioinformatic
+CNSLTNT	consultant
+COMPENS	compensation
+DISTRIB	distribution
+Devlpmt	development
+FOUNDTN	foundation
+IMPLMTN	implementation
+INTRNTL	international
+PSYCHOL	psychological
+Retirmt	retirement
+TECHNOL	technologist
+TELECOM	telecommunication
+TRNSPLT	transplant
+BSA/AML	bank secrecy act/ anti-money laundering
+BUS DEV	business development
+SPEC ED	special education
+CAD CAM	computer-aided design computer-aided manufacturing
+OR TECH	operating room technician,operating room technologist
+AD SALE	advertising sale
+TEAM LD	team leader
+MANUFACT	manufacture
+NGHBORHD	neighborhood
+Technlgy	technology
+UNEMPLOY	unemployment
+MED TECH	medicine technologist
+VET TECH	veterinary technician
+PROD SVC	PRODUCT SERVICE
+AD SALES	advertising sale
+ACCT MGR	account manager
+SW INTEG	software integration
+SW ENGRG	software engineering
+WEB PROD	web product
+INTERLIBR	interlibrary
+PERF&SCAL	Performance and Scalability
+PHOTOCOMP	photocomposition
+PROD SVCS	PRODUCT SERVICE
+ADMINISTRN	administration
+B-OPERATOR	boiler operator
+ENFORCEMNT	enforcement
+VULNERBLTY	vulnerability
+MARKET DEV	MARKET DEVELOPMENT
+SW release	software release
+PUB policy	public policy
+ELECTROPHYS	electrophysiology
+PHOTOGRAPHR	photographer
+Bus Analyst	business analyst
+SPECICAL ED	special education
+App Support	application support
+SW Engineer	software engineer
+Comp Analyst	Compensation Analyst
+NUC MED TECH	nuclear medicine technologist
+Apps Support	application support
+SW developer	software developer
+BUS DEVELOPMENT	business development
+VP	vice president
+MA	medical assistant
+JR	junior
+SR	senior
+SP	specialist
+IT	information technology
+RN	registered nurse
+RF	radio frequency
+PE	physical education
+PA	physician assistant,production assistant
+HC	home care
+IS	information system
+FA	failure analysis
+DA	dental assistant
+RPT	radiation protection technician
+BBQ	barbeque
+PVT	private
+SNR	senior
+JNR	junior
+NAT	national
+REP	representative
+DIR	director
+CSR	customer service representative
+SVC	service
+GEN	general
+OPR	operator
+OPS	operations
+SQA	software quality assurance
+SQE	supplier quality engineer
+SER	service
+RDA	registered dental assistant
+PTA	physical therapist assistant
+PCT	patient care technician
+PCB	printed circuit board
+PCA	patient care assistant
+MIS	management information system
+MHT	mental health technician
+MHA	mental health assistant
+MGT	management,manager
+MFT	marriage and family therapist
+MED	medical
+EXP	experience
+ILS	integrated logistics support
+FIS	fiscal
+FLD	field
+FIN	financial
+ENV	environment
+DON	director of nursing
+DME	durable medical equipment
+DIV	division
+DEV	development,developer
+CST	certified surgical technician
+CSM	casino shift manager
+CRT	certified respiratory therapist
+CLK	clerk
+CEO	chief executive officer
+CFA	chartered financial analyst
+CFO	chief financial officer
+BEN	benefits
+AFF	affairs
+OPER	operator
+NATL	national
+ADVR	advisor
+spec	specialist
+OPNS	operations
+CERT	certified
+SOLN	solution
+PROJ	project
+STAT	statistical
+PHYS	physical
+OFCR	officer
+MECH	mechanic,mechanical
+MACH	machine
+SERV	service
+CLIN	clinical
+INSP	inspection,inspector
+INFO	information
+DSGN	design,designer
+COOR	coordinator
+COOD	coordinator
+Anal	analyst
+INFOR	information
+OCCUP	occupational
+ADVSR	advisor
+APPLN	application
+STATIS	statistical
+ACCTING	accounting
+HANDERL	handler
+MARKTNG	marketing
+OPERTNS	operations
+ADMINSTR	administrator
+INFRASTR	infrastructure
+INFO SEC	information security
+ADVRTSNG	advertising
+PROG DIR	program director
+CALL CTR	call center
+HVY TRUCK	heavy truck
+INSTRUCTO	instructor
+REG SALES	regional sales
+FI ANALYST	financial analyst
+Bus Analyst	business analyst
+SERV TECH	service technician
+SVC TECH	service technician
+SERVICE TECH	service technician

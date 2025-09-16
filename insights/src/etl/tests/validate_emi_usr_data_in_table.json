@@ -1,0 +1,19 @@
+{
+    "_description": "Validate Splunk data loaded in table",
+    "application-name": "insights",
+    "notebook-file": "validate_emi_usr_view_data_in_table.py",
+    "notebook-param": [             
+      {
+          "key": "db_name",
+          "value": "{{__BLUE_MAIN_DB__}}"
+      },
+      {
+          "key": "table_name",
+          "value": "emi_usr_view_data"
+      },
+      {
+          "key": "expected_cols",
+          "value": "['orgid','aoid','uri','kpiid','kpiname','views_cnt']"
+      }
+   ] 
+}

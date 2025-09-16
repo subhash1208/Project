@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="CA" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="INFO" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %p %c: %m%n" />
+		</layout>
+	</appender>
+	<appender name="FA" class="org.apache.log4j.FileAppender">
+		<param name="append" value="false" />
+		<param name="file" value="build/unit-tests.log" />
+		<param name="Threshold" value="INFO" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %t %p %c: %m%n" />
+		</layout>
+	</appender>
+	<appender name="FAADP" class="org.apache.log4j.FileAppender">
+		<param name="append" value="false" />
+		<param name="file" value="build/unit-tests-adp.log" />
+		<param name="Threshold" value="INFO" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %t %p %c: %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.adp.datacloud" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="FAADP" />
+		<appender-ref ref="FA" />
+		<appender-ref ref="CA" />
+	</logger>
+	<logger name="hive.ql.metadata.Hive" additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="org.apache.hadoop.hive.metastore.RetryingHMSHandler"
+		additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="org.apache.hadoop.hive.serde2.lazy.LazyStruct"
+		additivity="false">
+		<level value="OFF" />
+	</logger>
+	<logger name="parquet.hadoop.ParquetRecordReader" additivity="false">
+		<level value="OFF" />
+	</logger>
+
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="CA" />
+		<appender-ref ref="FA" />
+	</root>
+</log4j:configuration>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insights>
+
+	<name>emi_ins_pr_pef_manager</name>
+	<type>CLIENT_INTERNAL</type>
+	<score_expression> <![CDATA[
+		ROUND(
+			CASE
+			    WHEN ABS(zscore_norm_diff_[fact]) IS NULL AND ABS(zscore_norm_pctg_diff_[fact]) IS NULL AND ABS(zscore_diff_[fact]) IS NULL AND ABS(zscore_pctg_diff_[fact]) IS NULL
+				THEN (CASE WHEN (percent_rank_[fact] < 50) THEN (100 - percent_rank_[fact])/100 ELSE (percent_rank_[fact]/100) END) * (1/(1 + percentage_headcount)) * 1/num_dimensions
+				WHEN ABS(zscore_norm_diff_[fact]) > 1 OR ABS(zscore_norm_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_norm_diff_[fact]) , ABS(zscore_norm_pctg_diff_[fact])) * 1/(1+abs(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+				WHEN ABS(zscore_diff_[fact]) > 3 OR ABS(zscore_pctg_diff_[fact]) > 1
+				THEN GREATEST(ABS(zscore_diff_[fact])/3, ABS(zscore_pctg_diff_[fact])) *  1/(1+abs(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+				ELSE
+					GREATEST(
+						ABS(zscore_norm_diff_[fact]),
+						ABS(zscore_norm_pctg_diff_[fact]),
+						ABS(zscore_diff_[fact]/3),
+						ABS(zscore_pctg_diff_[fact])
+					) * 1/(1+abs(percentage_headcount-percentage_headcount_r)) * 1/num_dimensions
+			END
+		, 2 )
+	]]></score_expression>
+
+	<dimensions>
+		<dimension type="invariant" partition_column="true">clnt_obj_id</dimension>
+		<!--dimension type="invariant" partition_column="true">zscore_type</dimension-->
+		<!--dimension type="invariant" partition_column="true">db_schema</dimension-->
+		<dimension percentile_rank="true" type="nullvariant">d_job_cd</dimension>
+		<dimension percentile_rank="true" type="nullvariant">d_hr_orgn_id</dimension>
+		<!--dimension type="variant">d_gndr_cd</dimension-->
+		<dimension percentile_rank_partition="true" type="invariant">mngr_pers_obj_id</dimension>
+		<hierarchy percentile_rank_partition="true">
+			<dimension type="ephemeral" differences="1" partition_column="true">yr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,4" partition_column="true">qtr_seq_nbr</dimension>
+			<dimension type="ephemeral" differences="1,12" partition_column="true">mnth_seq_nbr</dimension>
+		</hierarchy>
+		<hierarchy percentile_rank="true">
+			<dimension type="nullvariant">d_work_cntry_cd</dimension>
+			<dimension type="nullvariant">d_work_state_cd</dimension>
+			<!--dimension type="nullvariant">d_work_city_cd</dimension-->
+			<dimension type="nullvariant">d_work_loc_cd</dimension>
+		</hierarchy>
+	</dimensions>
+
+	<zscore_filter>(headcount &gt;= 1000 and percentage_headcount &gt;= 3) or (headcount &gt;= 100 and headcount &lt;= 1000 and percentage_headcount &gt;= 5)
+     or (headcount &gt;= 10 and headcount &lt;= 100 and num_employees &gt;= 5) or (headcount &lt; 10 and num_employees &gt;= 3)</zscore_filter>
+
+	<facts>
+		<fact>
+			<!--name>overtime_earnings_per_fte</name-->
+			<!--name>earnings_per_fte</name-->
+			<name type="non-rate">overtime_earnings</name>
+			<!--name type="non-rate">total_earnings</name-->
+			<name>average_earnings</name>
+		</fact>
+	</facts>
+
+	<supportcolumns>
+		<column>environment</column>
+	    <column>num_employees</column>
+		<column>headcount</column>
+		<column>percentage_headcount</column>
+		<column>overtime_earnings_events</column>
+		<column>average_earnings_events</column>
+		<column>period_cd</column>
+	</supportcolumns>
+
+<analysisgroups>
+		<analysisgroup>
+			<name>clnt_obj_id</name>
+			<name>zscore_type</name>
+			<name>yr_seq_nbr</name>
+			<name>qtr_seq_nbr</name>
+			<name>mnth_seq_nbr</name>
+		</analysisgroup>
+</analysisgroups>
+
+</insights>

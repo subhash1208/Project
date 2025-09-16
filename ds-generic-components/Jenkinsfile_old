@@ -1,0 +1,202 @@
+// Utility function to pull out the latest version from a pom.xml file content
+def latestVersion(pomXml) {
+    def matcher = (pomXml = ~'<latest>(.+)</latest>')
+    matcher ? matcher[0][1] : null
+}
+
+// The below will be inotialized in 'Init' stage
+def APPLICATION_BUILD_VERSION
+
+pipeline {
+
+    environment {
+        ARTIFACTORY_CREDENTIALS = credentials('new-artifactory-credentials')
+        GIT_AUTH = credentials('dsarchsvc_write')
+    }
+
+    parameters {
+        booleanParam(name: 'RUN_TESTS', defaultValue: false, description: 'Toggle unit tests')
+    }
+
+    // needs https://plugins.jenkins.io/parameterized-scheduler/
+    triggers {
+        parameterizedCron(env.BRANCH_NAME == 'develop' ? '''
+        # run every day around 3pm utc
+        H 3 * * * %RUN_TESTS=true''' : '')
+    }
+
+    agent {
+        label 'JenkinsSvcLimited-708035784431'
+        // label 'JenkinsSvcLimited-unittest-708035784431'
+    }
+    options {
+        disableConcurrentBuilds()
+    }
+    stages {
+
+        stage('Init') {
+            steps {
+                script {
+                    // The Publish behavior is different while on different branches
+                    def releasePom = sh(
+                        script: "curl -s https://artifactory.us.caas.oneadp.com/artifactory/datacloud-datascience-maven-local/com/adp/datacloud/ds/rdbms-integration/maven-metadata.xml",
+                        returnStdout: true
+                    )
+                    def mostRecentReleaseVersion = latestVersion(releasePom)
+                    def gradleProperties = sh(
+                        script: "./gradlew properties -q",
+                        returnStdout: true
+                    )
+                    def projectVersion = gradleProperties.split('\n').find {
+                        it.startsWith('version:')
+                    }.replace('version: ', '')
+
+                    def releaseVersion = projectVersion.replace('-SNAPSHOT', '') // This shall be used only while building from master branch
+
+                    if (mostRecentReleaseVersion == releaseVersion) {
+                        echo "ERROR: Gradle Project version is not updated in gradle.properties. You may have recently merged master into this branch. Please bump up the version to proceed with build."
+                        sh "exit 1"
+                    }
+                    if (env.BRANCH_NAME.matches(/master.*/)) {
+                        // Use the release version from gradle.properties.
+                        // Release versions shall be allowed ONLY from master branch
+                        APPLICATION_BUILD_VERSION = "$releaseVersion"
+                    } else if (env.BRANCH_NAME.matches(/support.*/)) {
+                        // We do a normal build on support branches and it is the developer's prerogative to make an increment on the build number
+                        // This step may fail if the build number is not incremented
+                        // This is intentional because support branches are never intended to be merged into master/develop
+                        // Support branch builds will carry suffix '-SUPPORT'
+                        def suffix = env.BRANCH_NAME.replace("support/", ".")
+                        APPLICATION_BUILD_VERSION = "$releaseVersion$suffix-SUPPORT"
+                    } else if (env.BRANCH_NAME.matches(/hotfix.*/)) {
+                        // We do a normal build on hotfix branches and it is the developer's prerogative to make an increment on the build number
+                        // This step may fail if the build number is not incremented
+                        // This is intentional because support branches are never intended to be merged into master/develop
+                        // Support branch builds will carry suffix '-SUPPORT'
+                        def suffix = env.BRANCH_NAME.replace("hotfix/", ".h-")
+                        APPLICATION_BUILD_VERSION = "$releaseVersion$suffix-SNAPSHOT"
+                    } else {
+                        // When not on master, always build snapshots
+                        // Develop branch will carry the '-SNAPSHOT' suffix
+                        // Feature branch builds will carry suffix '.f<featurename>-SNAPSHOT'
+                        // Release branch builds will carry suffix '.r-SNAPSHOT'
+                        def suffix = env.BRANCH_NAME.replace("feature/", ".f-").replaceAll(/^release.*$/, ".r").replace("develop", "")
+                        APPLICATION_BUILD_VERSION = "$releaseVersion$suffix-SNAPSHOT"
+                    }
+
+                }
+            }
+        }
+
+        stage('Assemble') {
+            steps {
+                script {
+                    // assemble jar before build directory has files generated from tests and upload only if tests go through
+                    echo "Assembling artifact(s) with version - $APPLICATION_BUILD_VERSION"
+                    sh "./gradlew -Pversion=$APPLICATION_BUILD_VERSION clean assemble"
+                    echo "Assembled artifact(s) with version - $APPLICATION_BUILD_VERSION"
+                }
+            }
+        }
+
+        stage('Test') {
+            when {
+                expression {
+                    params.RUN_TESTS == true
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    script {
+                        sh "aws configure set default.region us-west-1 && aws configure list && aws configure list-profiles"
+                        sh "aws sts get-caller-identity"
+                        echo "Testing version - $APPLICATION_BUILD_VERSION"
+                        sh "AWS_CREDENTIAL_PROFILES_FILE=$HOME/.aws/credentials ./gradlew -Pversion=$APPLICATION_BUILD_VERSION test"
+                        echo "Finshed Testing version - $APPLICATION_BUILD_VERSION"
+                    }
+                }                  
+                script{
+                        junit '**/build/test-results/test/TEST-*.xml'
+                }
+            }
+        }
+      	
+        stage('SonarQube analysis') {
+            when {
+                expression {
+                    env.BRANCH_NAME.matches(/develop.*/)
+                }
+            }            
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    script {
+                        withSonarQubeEnv('sonar') {
+                            // Will pick the global server connection you have configured
+                            sh "./gradlew -Pversion=$APPLICATION_BUILD_VERSION sonarqube"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                script {
+                    echo "Publishing artifact(s) with version - $APPLICATION_BUILD_VERSION"
+                    sh "./gradlew -Pversion=$APPLICATION_BUILD_VERSION publish"
+                    echo "Published artifact(s) with version - $APPLICATION_BUILD_VERSION"
+                }
+            }
+        }
+
+        stage('DownStream'){
+            when {
+                expression {
+                    env.BRANCH_NAME == 'develop'
+                }
+            }
+            steps {
+                script {
+                    build job: 'ds-generic-components/support%2Fdatabricks-build', wait: false
+                }
+            }            
+        }
+
+    }
+    post {     
+        success {         
+            script {
+                if (env.BRANCH_NAME.matches(/master.*/) ) {
+                    sh """
+                    echo "tagging the build"
+                    git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"
+                    echo "v$APPLICATION_BUILD_VERSION"
+                    git tag "v$APPLICATION_BUILD_VERSION"
+                    git push origin "v$APPLICATION_BUILD_VERSION"
+                    """
+
+                    def APPLICATION_NEXT_VERSION = sh (
+                        script: """echo "$APPLICATION_BUILD_VERSION" | perl -pe 's/^((\\d+\\.)*)(\\d+)(.*)\$/\$1.(\$3+1).\$4/e' | tr -d '\\n'""",
+                        returnStdout: true
+                    )
+
+                    sh """
+                    echo "incrementing the version in develop branch"
+                    git checkout develop
+                    git pull --no-tags
+                    git merge origin/master
+                    sed -i "s/version=.*/version=$APPLICATION_NEXT_VERSION/g" gradle.properties
+                    cat gradle.properties
+                    git add gradle.properties
+                    git commit -m 'AUTO UPGRADING VERSION to $APPLICATION_NEXT_VERSION'
+                    git push
+                    """
+                    // nextVersion=`echo $projectVersion | perl -ne 'chomp; print join(".", splice(@{[split/\\./,$_]}, 0, -1), map {++$_} pop @{[split/\\./,$_]}), "\\n";'`
+                } else if (env.BRANCH_NAME.matches(/develop.*/) || env.BRANCH_NAME.matches(/support.*/) ){
+                    build job: 'orchestration-building-blocks/develop', wait: false
+                }
+            }
+        }
+
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "InitialInstanceCount": 1,
+    "InstanceType": "ml.m5.xlarge",
+     "SAGEMAKER_PROGRAM": "serving",
+    "SAGEMAKER_SUBMIT_DIRECTORY": "/opt/ml/code"
+}

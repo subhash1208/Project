@@ -1,0 +1,75 @@
+{
+    "_description": "EMI Recommendation FE",
+    "_note": "EMI Recommendation FE",
+    "file": "emi_recommend_feature_engineering.jar",
+    "class-name": "com.adp.datacloud.ds.RecommenderEngine",
+    "files": ["recomm_inputs/emi_recommendations.sql","recomm_inputs/emi_recommendations.xml"],
+    "py-files": [],
+    "jars": [],
+    "spark-config": {
+        "driver-cores": 5,
+        "driver-memory": 15,
+        "conf": {
+            "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+            "spark.driver.memoryOverhead":"2G",
+            "spark.kryoserializer.buffer.max": "1024m",
+            "spark.rpc.message.maxSize":"50",
+            "spark.memory.fraction": "0.80",
+            "spark.memory.storageFraction": "0.30",
+            "spark.executor.extraJavaOptions":"-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+UseParallelGC -XX:ParallelGCThreads=4 -XX:MaxPermSize=1024m -XX:PermSize=256m                    "
+        }
+    },    
+    "args": [
+        {
+            "key": "input-spec",
+            "value": "emi_recommendations.sql"
+        },
+        {
+            "key": "xml-config-file",
+            "value": "emi_recommendations.xml"
+        },
+        {
+            "key": "output-partition-spec",
+            "value": "environment"
+        },
+        {
+            "key": "enable-checkpoint",
+            "value": "true"
+        },
+        {
+            "key": "output-db",
+            "value": "{{__BLUE_MAIN_DB__}}"
+        },
+        {
+            "key": "num-shuffle-partitions",
+            "value": "1600"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__GREEN_MAIN_DB__={{__GREEN_MAIN_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__BLUE_MAIN_DB__={{__BLUE_MAIN_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__RO_GREEN_RAW_DB__={{__RO_GREEN_RAW_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__RO_BLUE_RAW_DB__={{__RO_BLUE_RAW_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__RO_GREEN_MAIN_DB__={{__RO_GREEN_MAIN_DB__}}"
+        },
+        {
+            "key": "hiveconf",
+            "value": "__RO_BLUE_LANDING_MAIN_DB__={{__RO_BLUE_LANDING_MAIN_DB__}}"
+        }
+    ],
+    "jobcluster-config": {
+        "databricks-version": "9.1.x-cpu-ml-scala2.12"
+        }
+}

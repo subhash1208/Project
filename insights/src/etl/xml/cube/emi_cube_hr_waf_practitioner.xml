@@ -1,0 +1,323 @@
+<cubes>
+	<cube>
+		<name>emi_cube_hr_waf_practitioner</name>
+
+		<dimensions>
+			<dimension mandatory="true">clnt_obj_id</dimension>
+			<hierarchy>
+				<dimension mandatory="true">yr_cd</dimension>
+				<dimension>qtr_cd</dimension>
+				<dimension>mnth_cd</dimension>
+			</hierarchy>
+			<hierarchy>
+				<dimension>d_work_cntry_cd</dimension>
+				<dimension xor-group-name="main">d_work_state_cd</dimension>
+				<dimension>d_work_loc_cd</dimension>
+			</hierarchy>
+			<dimension xor-group-name="main">d_job_cd</dimension>
+			<dimension xor-group-name="main">d_hr_orgn_id</dimension>
+		</dimensions>
+
+		<addons>
+			<supportcolumns>
+				<column>f_work_asgnmt_stus_cd</column>
+				<column>f_work_asgnmt_actv_ind</column>
+				<column>is_active_in_mnth_end</column>
+				<column>is_active_in_qtr_end</column>
+				<column>is_active_in_yr_end</column>
+				<!--column>flsa_excl_ind</column>
+				<column>pay_grp_excl_ind</column-->
+				<column>rec_eff_strt_dt</column>
+				<column>rec_eff_end_dt</column>
+				<!--column>d_full_tm_part_tm_cd</column>
+				<column>d_reg_temp_cd</column>
+				<column>d_gndr_cd</column-->
+			</supportcolumns>
+		</addons>
+
+		<facts>
+
+			<fact>
+				<!-- This fact is used ONLY for the purpose of scoring, and hence an approximation is OK -->
+				<name>num_employees</name>
+				<column>pers_obj_id</column>
+				<aggregation>
+					<type>APPROX_COUNT_DISTINCT</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">yr_end_active_pers_cnt</name>
+				<column>is_active_in_yr_end</column>
+				<when>f_work_asgnmt_actv_ind=1</when>
+				<aggregation>
+					 <type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">qtr_end_active_pers_cnt</name>
+				<column>is_active_in_qtr_end</column>
+				<when>f_work_asgnmt_actv_ind=1</when>
+				<aggregation>
+					 <type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">mnth_end_active_pers_cnt</name>
+				<column>is_active_in_mnth_end</column>
+				<when>f_work_asgnmt_actv_ind=1</when>
+				<aggregation>
+					 <type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_actv_ind=1</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">min_strt_dt</name>
+				<column>rec_eff_strt_dt</column>
+				<when>f_work_asgnmt_stus_cd in ('P','A','L','S')</when>
+				<aggregation>
+					<type>MIN</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">max_end_dt</name>
+				<column>rec_eff_end_dt</column>
+				<when>f_work_asgnmt_stus_cd in ('P','A','L','S')</when>
+				<aggregation>
+					<type>MAX</type>
+				</aggregation>
+			</fact>
+
+			<!--fact>
+				<name exclude="true">yr_min_strt_dt</name>
+				<column>rec_eff_strt_dt</column>
+				<when>is_active_in_yr_end=1 AND f_work_asgnmt_stus_cd in ('P','L')</when>
+				<aggregation>
+					<type>MIN</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">yr_max_end_dt</name>
+				<column>rec_eff_end_dt</column>
+				<when>is_active_in_yr_end=1 AND f_work_asgnmt_stus_cd in ('P','L')</when>
+				<aggregation>
+					<type>MAX</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">qtr_min_strt_dt</name>
+				<column>rec_eff_strt_dt</column>
+				<when>is_active_in_qtr_end=1 AND f_work_asgnmt_stus_cd in ('P','L')</when>
+				<aggregation>
+					<type>MIN</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">qtr_max_end_dt</name>
+				<column>rec_eff_end_dt</column>
+				<when>is_active_in_qtr_end=1 AND f_work_asgnmt_stus_cd in ('P','L')</when>
+				<aggregation>
+					<type>MAX</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">mnth_min_strt_dt</name>
+				<column>rec_eff_strt_dt</column>
+				<when>is_active_in_mnth_end=1 AND f_work_asgnmt_stus_cd in ('P','L')</when>
+				<aggregation>
+					<type>MIN</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">mnth_max_end_dt</name>
+				<column>rec_eff_end_dt</column>
+				<when>is_active_in_mnth_end=1 AND f_work_asgnmt_stus_cd in ('P','L')</when>
+				<aggregation>
+					<type>MAX</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_part_tm_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_stus_cd in ('P','A','L','S') AND d_full_tm_part_tm_cd = 'P'</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_temp_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_stus_cd in ('P','A','L','S') AND d_reg_temp_cd = 'T'</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>female_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_stus_cd in ('P','A','L','S') AND d_gndr_cd = 'F' AND flsa_excl_ind = 0 AND pay_grp_excl_ind = 0</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact-->
+
+			<fact>
+				<name exclude="true">yrly_leave_person_days</name>
+				<column>yr_end_leave_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">qtrly_leave_person_days</name>
+				<column>qtr_end_leave_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name exclude="true">mnthly_leave_person_days</name>
+				<column>mnth_end_leave_ind</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<!--fact>
+				<name>num_inactive_person_days</name>
+				<column>eff_person_days</column>
+				<when>f_work_asgnmt_stus_cd in ('P','L','S')</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>num_managers</name>
+				<column>is_manager</column>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>compa_ratio</name>
+				<column>f_compa_rt</column>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact-->
+
+			<fact>
+				<name>yr_tenure</name>
+				<column>tnur</column>
+				<when>is_active_in_yr_end=1 and f_work_asgnmt_actv_ind=1</when>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>qtr_tenure</name>
+				<column>tnur</column>
+				<when>is_active_in_qtr_end=1 and f_work_asgnmt_actv_ind=1</when>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>mnth_tenure</name>
+				<column>tnur</column>
+				<when>is_active_in_mnth_end=1 and f_work_asgnmt_actv_ind=1</when>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+
+		</facts>
+
+		<postprocess>
+			<!-- Composite Facts -->
+			<column>
+				<name>headcount</name>
+				<expr>round(num_person_days / (datediff(max_end_dt,min_strt_dt) + 1) , 2)</expr>
+			</column>
+			<column>
+				<name>headcount_band</name>
+				<expr>CASE  WHEN ceil(num_person_days / (datediff(max_end_dt,min_strt_dt) + 1)) BETWEEN 1 and 99 THEN 1
+							WHEN ceil(num_person_days / (datediff(max_end_dt,min_strt_dt) + 1)) BETWEEN 100 and 499 THEN 2
+							WHEN ceil(num_person_days / (datediff(max_end_dt,min_strt_dt) + 1)) BETWEEN 500 and 999 THEN 3
+							WHEN ceil(num_person_days / (datediff(max_end_dt,min_strt_dt) + 1)) BETWEEN 1000 and 4999 THEN 4
+							WHEN ceil(num_person_days / (datediff(max_end_dt,min_strt_dt) + 1)) >= 5000 THEN 5
+						ELSE 0 END
+				</expr>
+			</column>
+			<!--column>
+				<name>inactive_headcount</name>
+				<expr>round(num_inactive_person_days / (datediff(max_end_dt,min_strt_dt) + 1), 2)</expr>
+			</column>
+			<column>
+				<name>parttime_headcount</name>
+				<expr>round(num_part_tm_person_days / (datediff(max_end_dt,min_strt_dt) + 1), 2)</expr>
+			</column>
+			<column>
+				<name>temp_headcount</name>
+				<expr>round(num_temp_person_days / (datediff(max_end_dt,min_strt_dt) + 1), 2)</expr>
+			</column>
+			<column>
+				<name>female_percentage</name>
+				<expr>round(100 * (female_person_days / num_person_days), 2)</expr>
+				<inclusionrange>0,100</inclusionrange>
+			</column-->
+			<column>
+				<name>leave_person_days</name>
+				<expr>COALESCE((CASE  WHEN mnth_cd IS NOT NULL THEN mnthly_leave_person_days
+							WHEN qtr_cd IS NOT NULL THEN qtrly_leave_person_days
+							ELSE yrly_leave_person_days
+						END),0)</expr>
+			</column>
+
+			<column>
+				<name>period_end_active_pers_cnt</name>
+				<expr>CASE WHEN mnth_cd IS NOT NULL THEN mnth_end_active_pers_cnt
+						WHEN qtr_cd IS NOT NULL THEN qtr_end_active_pers_cnt
+						ELSE yr_end_active_pers_cnt END</expr>
+			</column>
+			<column>
+				<name>average_tenure</name>
+				<expr>round((CASE WHEN mnth_cd IS NOT NULL THEN mnth_tenure
+						WHEN qtr_cd IS NOT NULL THEN qtr_tenure
+						ELSE yr_tenure END), 2)</expr>
+			</column>
+			<!--column>
+				<name>span_of_control</name>
+				<expr>num_managers / period_end_active_pers_cnt</expr>
+			</column-->
+		</postprocess>
+
+	</cube>
+
+</cubes>

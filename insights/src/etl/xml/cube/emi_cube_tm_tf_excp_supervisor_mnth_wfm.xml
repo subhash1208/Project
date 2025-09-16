@@ -1,0 +1,98 @@
+<cubes>
+	<cube>
+		<name>emi_cube_tm_tf_excp_supervisor_mnth_wfm</name>
+
+		<dimensions>
+			<dimension mandatory="true">clnt_obj_id</dimension>
+			<dimension mandatory="true">supvr_pers_obj_id</dimension>
+			<hierarchy>
+				<dimension mandatory="true">yr_cd</dimension>
+				<dimension mandatory="true">qtr_cd</dimension>
+				<dimension mandatory="true">mnth_cd</dimension>
+			</hierarchy>
+			<dimension mandatory="true">excp_type</dimension>
+			<dimension mandatory="true">rpt_access</dimension>
+		</dimensions>
+
+		<facts>
+
+			<fact>
+				<name>iqr</name>
+				<column>excep_count_pers</column>
+				<when>mnth_cd is not null</when>
+				<aggregation>
+					<type>HIVE_PERCENTILE</type>
+					<arguments>
+						<argument>25,75</argument>
+						<argument>10000</argument>
+						<argument>true</argument>
+					</arguments>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>total_excp_cnt</name>
+				<column>excep_count_pers</column>
+				<when>mnth_cd is not null</when>
+				<aggregation>
+					<type>SUM</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>excp_cnt_avg</name>
+				<column>excep_count_pers</column>
+				<when>mnth_cd is not null</when>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>excp_cnt_stddev</name>
+				<column>excep_count_pers</column>
+				<when>mnth_cd is not null</when>
+				<aggregation>
+					<type>STDDEV</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>norm_excp_cnt_avg</name>
+				<column>norm_excep_count_pers</column>
+				<when>mnth_cd is not null</when>
+				<aggregation>
+					<type>AVG</type>
+				</aggregation>
+			</fact>
+
+			<fact>
+				<name>norm_excp_cnt_stddev</name>
+				<column>norm_excep_count_pers</column>
+				<when>mnth_cd is not null</when>
+				<aggregation>
+					<type>STDDEV</type>
+				</aggregation>
+			</fact>
+			<fact>
+				<name>pers_cnt</name>
+				<column>pers_obj_id</column>
+				<when>mnth_cd is not null</when>
+				<aggregation>
+					<type>COUNT</type>
+				</aggregation>
+			</fact>
+		</facts>
+
+		<postprocess>
+			<column>
+				<name>IQR_DIFF</name>
+				<expr>iqr_75th_percentile - iqr_25th_percentile</expr>
+			</column>
+
+			<column>
+				<name>iqr_outlier_val</name>
+				<expr>iqr_75th_percentile + (1.25 * (IQR_DIFF))</expr>
+			</column>
+		</postprocess>
+	</cube>
+</cubes>
